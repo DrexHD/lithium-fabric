@@ -1,6 +1,6 @@
 package me.jellysquid.mods.lithium.mixin.ai.goal;
 
-import me.jellysquid.mods.lithium.common.ai.GoalExtended;
+import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenHashSet;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
@@ -10,11 +10,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.EnumSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
 @Mixin(GoalSelector.class)
 public abstract class MixinGoalSelector {
+    private static final Goal.Control[] CONTROLS = Goal.Control.values();
+
     @Shadow
     @Final
     private Supplier<Profiler> profiler;
@@ -24,27 +28,24 @@ public abstract class MixinGoalSelector {
     @Final
     private Set<PrioritizedGoal> goals;
 
-    /**
-     * Array of flags indicating which controls are disabled for the entity, indexed by the control enum's ordinal. If
-     * the value is true for a control, it is disabled.
-     */
-    private boolean[] disabledControlsArray;
+    @Shadow
+    @Final
+    private EnumSet<Goal.Control> disabledControls;
+
+    @Shadow
+    @Final
+    private Map<Goal.Control, WeightedGoal> goalsByControl;
 
     /**
-     * Array of goals which have acquired a AI control, indexed by the control enum's ordinal. A null value indicates
-     * that no goal has acquired the control.
+     * Replace the goal set with an optimized collection type which performs better for iteration.
      */
-    private PrioritizedGoal[] goalsByControlArray;
-
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void init(Supplier<Profiler> supplier, CallbackInfo ci) {
-        this.disabledControlsArray = new boolean[4];
-        this.goalsByControlArray = new PrioritizedGoal[4];
+    private void reinit(Supplier<Profiler> supplier, CallbackInfo ci) {
+        this.goals = new ObjectLinkedOpenHashSet<>(this.goals);
     }
 
     /**
-     * Makes use of a simple ordinal-indexed array to track the controls of each goal. We also avoid the usage of
-     * streams entirely to squeeze out additional performance.
+     * Avoid the usage of streams entirely to squeeze out additional performance.
      *
      * @reason Remove lambdas and complex stream logic
      * @author JellySquid
@@ -64,7 +65,7 @@ public abstract class MixinGoalSelector {
 
         // Stop any goals which are disabled or shouldn't continue executing
         this.stopGoals();
-        
+
         // Update the controls
         this.cleanupControls();
 
@@ -95,13 +96,13 @@ public abstract class MixinGoalSelector {
      * Performs a scan over all currently held controls and releases them if their associated goal is stopped.
      */
     private void cleanupControls() {
-        for (int i = 0; i < this.goalsByControlArray.length; i++) {
-            PrioritizedGoal goal = this.goalsByControlArray[i];
+        for (Goal.Control control : CONTROLS) {
+            PrioritizedGoal goal = this.goalsByControl.get(control);
 
             // If the control has been acquired by a goal, check if the goal should still be running
             // If the goal should not be running anymore, release the control held by it
             if (goal != null && !goal.isRunning()) {
-                this.goalsByControlArray[i] = null;
+                this.goalsByControl.remove(control);
             }
         }
     }
@@ -170,7 +171,7 @@ public abstract class MixinGoalSelector {
      * (acquired by another goal, but eligible for replacement) and not disabled for the entity.
      */
     private boolean areGoalControlsAvailable(PrioritizedGoal goal) {
-        for (Goal.Control control : getControls(goal)) {
+        for (Goal.Control control : goal.getControls()) {
             if (this.isControlDisabled(control)) {
                 return false;
             }
@@ -186,48 +187,24 @@ public abstract class MixinGoalSelector {
     }
 
     /**
-     * @reason Update our array instead
-     * @author JellySquid
-     */
-    @Overwrite
-    public void disableControl(Goal.Control control) {
-        this.disabledControlsArray[control.ordinal()] = true;
-    }
-
-    /**
-     * @reason Update our array instead
-     * @author JellySquid
-     */
-    @Overwrite
-    public void enableControl(Goal.Control control) {
-        this.disabledControlsArray[control.ordinal()] = false;
-    }
-
-    /**
      * Returns true if the specified control is disabled.
      */
     private boolean isControlDisabled(Goal.Control control) {
-        return this.disabledControlsArray[control.ordinal()];
+        return this.disabledControls.contains(control);
     }
 
     /**
      * Returns the goal which is currently holding the specified control, or null if no goal is.
      */
     private PrioritizedGoal getGoalOccupyingControl(Goal.Control control) {
-        return this.goalsByControlArray[control.ordinal()];
+        return this.goalsByControl.get(control);
     }
 
     /**
      * Changes the goal which is currently holding onto a control.
      */
     private void setGoalOccupyingControl(Goal.Control control, PrioritizedGoal goal) {
-        this.goalsByControlArray[control.ordinal()] = goal;
+        this.goalsByControl.put(control, goal);
     }
 
-    /**
-     * Helper method which accesses the flat required controls array from a goal.
-     */
-    private static Goal.Control[] getControls(PrioritizedGoal goal) {
-        return ((GoalExtended) goal.getGoal()).getRequiredControls();
-    }
 }

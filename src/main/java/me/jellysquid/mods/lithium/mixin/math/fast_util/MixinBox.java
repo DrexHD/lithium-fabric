@@ -9,6 +9,14 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Mixin(Box.class)
 public class MixinBox {
+
+    static {
+        assert Direction.Axis.X.ordinal() == 0;
+        assert Direction.Axis.Y.ordinal() == 1;
+        assert Direction.Axis.Z.ordinal() == 2;
+        assert Direction.Axis.values().length == 3;
+    }
+
     @Shadow
     @Final
     public double minX;

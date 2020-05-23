@@ -50,7 +50,7 @@ public abstract class MixinWorld implements WorldView, CollisionView, WorldAcces
 
     @Override
     public BlockView getExistingChunk(int chunkX, int chunkZ) {
-        return this.getChunkLithium(chunkX, chunkZ, ChunkStatus.EMPTY, false);
+        return this.getChunkLithium(chunkX, chunkZ, ChunkStatus.FULL, false);
     }
 
     private Chunk getChunkLithium(int chunkX, int chunkZ, ChunkStatus leastStatus, boolean create) {

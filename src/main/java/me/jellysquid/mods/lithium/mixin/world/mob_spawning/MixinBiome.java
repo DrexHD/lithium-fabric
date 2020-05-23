@@ -23,12 +23,19 @@ public class MixinBiome {
 
     /**
      * Re-initialize the spawn category lists with a much faster backing collection type for enum keys. This provides
-     * a modest speed-up for mob spawning as {@link Biome#getEntitySpawnList(SpawnGroup)} is a rather hot method.
+     * a modest speed-up for mob spawning as {@link Biome#getEntitySpawnList(EntityCategory)} is a rather hot method.
+     * <p>
+     * Additionally, the list containing each spawn entry is modified to include a hash table for lookups, making them
+     * O(1) instead of O(n) and providing another boost when lists get large. Since a simple wrapper type is used, this
+     * should provide good compatibility with other mods which modify spawn entries.
      */
     @Inject(method = "<init>", at = @At("RETURN"))
     private void reinit(Biome.Settings settings, CallbackInfo ci) {
         Map<SpawnGroup, List<Biome.SpawnEntry>> spawns = Maps.newEnumMap(SpawnGroup.class);
-        spawns.putAll(this.spawns);
+
+        for (Map.Entry<SpawnGroup, List<Biome.SpawnEntry>> entry : this.spawns.entrySet()) {
+            spawns.put(entry.getKey(), HashedList.wrapper(entry.getValue()));
+        }
 
         this.spawns = spawns;
     }

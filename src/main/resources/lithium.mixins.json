@@ -10,7 +10,6 @@
         "ai.nearby_entity_tracking.MixinClientWorld"
     ],
     "mixins": [
-        "ai.goal.MixinGoal",
         "ai.goal.MixinGoalSelector",
         "ai.nearby_entity_tracking.MixinLivingEntity",
         "ai.nearby_entity_tracking.MixinServerWorld",
@@ -18,6 +17,7 @@
         "ai.nearby_entity_tracking.goals.MixinFleeEntityGoal",
         "ai.nearby_entity_tracking.goals.MixinLookAtGoal",
         "ai.pathing.MixinChunkCache",
+        "ai.pathing.MixinLandPathNodeMaker",
         "ai.raid.MixinPickupBannerAsLeaderGoal",
         "ai.raid.MixinRaid",
         "ai.task.MixinCompositeTask",
@@ -47,6 +47,7 @@
         "entity.collisions.MixinEntityView",
         "entity.data_tracker.no_locks.MixinDataTracker",
         "entity.data_tracker.use_arrays.MixinDataTracker",
+        "entity.stream_entity_collisions_lazily.MixinEntity",
         "gen.chunk_region.MixinChunkRegion",
         "math.fast_util.MixinAxisCycleDirection",
         "math.fast_util.MixinAxisCycleDirection$MixinBackward",
@@ -77,6 +78,7 @@
         "world.explosions.MixinExplosion",
         "world.fire_checks.MixinWorld",
         "world.mob_spawning.MixinBiome",
+        "world.player_chunk_tick.MixinThreadedAnvilChunkStorage",
         "world.tick_scheduler.MixinServerWorld"
     ]
 }
