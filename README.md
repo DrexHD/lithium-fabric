@@ -1,6 +1,9 @@
 
 ![Project icon](https://github.com/jellysquid3/lithium-fabric/raw/1.16.x/dev/doc/logo.png)
 
+# Note
+This fork is a private version I maintain for my snapshot server (Kilocraft), use at your own risk!
+
 # Lithium
 ![GitHub license](https://img.shields.io/github/license/jellysquid3/lithium-fabric.svg)
 ![GitHub issues](https://img.shields.io/github/issues/jellysquid3/lithium-fabric.svg)
@@ -17,7 +20,7 @@ to edit your configuration file to narrow down issues. If you do run into an iss
 
 You can help buy me food and support development while getting early access builds of my mods by [making a monthly pledge to my Patreon!](https://patreon.com/jellysquid) You'll also gain some special perks, such as prioritized support on [my Discord server](https://jellysquid.me/discord).
 
-<a href="https://www.patreon.com/bePatron?u=824442"><img src="https://github.com/jellysquid3/Phosphor/raw/1.16.x/dev/doc/patreon.png" width="200"></a>
+<a href="https://www.patreon.com/bePatron?u=824442"><img src="https://raw.githubusercontent.com/jellysquid3/phosphor-forge/1.15.x/dev/doc/patreon.png" width="200"></a>
 
 ### Join the Discord
 
