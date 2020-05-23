@@ -29,12 +29,12 @@ public abstract class MixinWorld {
      */
     @Overwrite
     public boolean doesAreaContainFireSource(Box box) {
-        int minX = MathHelper.floor(box.x1);
-        int maxX = MathHelper.floor(box.x2);
-        int minY = MathHelper.floor(box.y1);
-        int maxY = MathHelper.floor(box.y2);
-        int minZ = MathHelper.floor(box.z1);
-        int maxZ = MathHelper.floor(box.z2);
+        int minX = MathHelper.floor(box.minX);
+        int maxX = MathHelper.floor(box.maxX);
+        int minY = MathHelper.floor(box.minY);
+        int maxY = MathHelper.floor(box.maxY);
+        int minZ = MathHelper.floor(box.minZ);
+        int maxZ = MathHelper.floor(box.maxZ);
 
         for (int x = minX; x <= maxX; ++x) {
             for (int z = minZ; z <= maxZ; ++z) {

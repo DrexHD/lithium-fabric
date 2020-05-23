@@ -59,11 +59,11 @@ public class VoxelShapeSimpleCube extends VoxelShape implements VoxelShapeExtend
     private double calculatePenetration(AxisCycleDirection dir, Box box, double maxDist) {
         switch (dir) {
             case NONE:
-                return this.calculatePenetration(this.x1, this.x2, box.x1, box.x2, maxDist);
+                return this.calculatePenetration(this.x1, this.x2, box.minX, box.maxX, maxDist);
             case FORWARD:
-                return this.calculatePenetration(this.z1, this.z2, box.z1, box.z2, maxDist);
+                return this.calculatePenetration(this.z1, this.z2, box.minZ, box.maxZ, maxDist);
             case BACKWARD:
-                return this.calculatePenetration(this.y1, this.y2, box.y1, box.y2, maxDist);
+                return this.calculatePenetration(this.y1, this.y2, box.minY, box.maxY, maxDist);
             default:
                 throw new IllegalArgumentException();
         }
@@ -72,11 +72,11 @@ public class VoxelShapeSimpleCube extends VoxelShape implements VoxelShapeExtend
     private boolean intersects(AxisCycleDirection dir, Box box) {
         switch (dir) {
             case NONE:
-                return lessThan(this.y1, box.y2) && lessThan(box.y1, this.y2) && lessThan(this.z1, box.z2) && lessThan(box.z1, this.z2);
+                return lessThan(this.y1, box.maxY) && lessThan(box.minY, this.y2) && lessThan(this.z1, box.maxZ) && lessThan(box.minZ, this.z2);
             case FORWARD:
-                return lessThan(this.x1, box.x2) && lessThan(box.x1, this.x2) && lessThan(this.y1, box.y2) && lessThan(box.y1, this.y2);
+                return lessThan(this.x1, box.maxX) && lessThan(box.minX, this.x2) && lessThan(this.y1, box.maxY) && lessThan(box.minY, this.y2);
             case BACKWARD:
-                return lessThan(this.z1, box.z2) && lessThan(box.z1, this.z2) && lessThan(this.x1, box.x2) && lessThan(box.x1, this.x2);
+                return lessThan(this.z1, box.maxZ) && lessThan(box.minZ, this.z2) && lessThan(this.x1, box.maxX) && lessThan(box.minX, this.x2);
             default:
                 throw new IllegalArgumentException();
         }
@@ -191,8 +191,8 @@ public class VoxelShapeSimpleCube extends VoxelShape implements VoxelShapeExtend
 
     @Override
     public boolean intersects(Box box, double x, double y, double z) {
-        return (box.x1 < (this.x2 + x)) && (box.x2 > (this.x1 + x)) &&
-                (box.y1 < (this.y2 + y)) && (box.y2 > (this.y1 + y)) &&
-                (box.z1 < (this.z2 + z)) && (box.z2 > (this.z1 + z));
+        return (box.minX < (this.x2 + x)) && (box.maxX > (this.x1 + x)) &&
+                (box.minY < (this.y2 + y)) && (box.maxY > (this.y1 + y)) &&
+                (box.minZ < (this.z2 + z)) && (box.maxZ > (this.z1 + z));
     }
 }

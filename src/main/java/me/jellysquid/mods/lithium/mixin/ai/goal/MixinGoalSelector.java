@@ -3,7 +3,7 @@ package me.jellysquid.mods.lithium.mixin.ai.goal;
 import me.jellysquid.mods.lithium.common.ai.GoalExtended;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.GoalSelector;
-import net.minecraft.entity.ai.goal.WeightedGoal;
+import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.util.profiler.Profiler;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,7 +22,7 @@ public abstract class MixinGoalSelector {
     @Mutable
     @Shadow
     @Final
-    private Set<WeightedGoal> goals;
+    private Set<PrioritizedGoal> goals;
 
     /**
      * Array of flags indicating which controls are disabled for the entity, indexed by the control enum's ordinal. If
@@ -34,12 +34,12 @@ public abstract class MixinGoalSelector {
      * Array of goals which have acquired a AI control, indexed by the control enum's ordinal. A null value indicates
      * that no goal has acquired the control.
      */
-    private WeightedGoal[] goalsByControlArray;
+    private PrioritizedGoal[] goalsByControlArray;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void init(Supplier<Profiler> supplier, CallbackInfo ci) {
         this.disabledControlsArray = new boolean[4];
-        this.goalsByControlArray = new WeightedGoal[4];
+        this.goalsByControlArray = new PrioritizedGoal[4];
     }
 
     /**
@@ -78,7 +78,7 @@ public abstract class MixinGoalSelector {
      * Attempts to stop all goals which are running and either shouldn't continue or no longer have available controls.
      */
     private void stopGoals() {
-        for (WeightedGoal goal : this.goals) {
+        for (PrioritizedGoal goal : this.goals) {
             // Filter out goals which are not running
             if (!goal.isRunning()) {
                 continue;
@@ -96,7 +96,7 @@ public abstract class MixinGoalSelector {
      */
     private void cleanupControls() {
         for (int i = 0; i < this.goalsByControlArray.length; i++) {
-            WeightedGoal goal = this.goalsByControlArray[i];
+            PrioritizedGoal goal = this.goalsByControlArray[i];
 
             // If the control has been acquired by a goal, check if the goal should still be running
             // If the goal should not be running anymore, release the control held by it
@@ -110,7 +110,7 @@ public abstract class MixinGoalSelector {
      * Attempts to start all goals which are not-already running, can be started, and have their controls available.
      */
     private void startGoals() {
-        for (WeightedGoal goal : this.goals) {
+        for (PrioritizedGoal goal : this.goals) {
             // Filter out goals which are already running or can't be started
             if (goal.isRunning() || !goal.canStart()) {
                 continue;
@@ -123,7 +123,7 @@ public abstract class MixinGoalSelector {
 
             // Hand over controls to this goal and stop any goals which depended on those controls
             for (Goal.Control control : getControls(goal)) {
-                WeightedGoal otherGoal = this.getGoalOccupyingControl(control);
+                PrioritizedGoal otherGoal = this.getGoalOccupyingControl(control);
 
                 if (otherGoal != null) {
                     otherGoal.stop();
@@ -143,7 +143,7 @@ public abstract class MixinGoalSelector {
         this.profiler.get().push("goalTick");
 
         // Tick all currently running goals
-        for (WeightedGoal goal : this.goals) {
+        for (PrioritizedGoal goal : this.goals) {
             if (goal.isRunning()) {
                 goal.tick();
             }
@@ -155,7 +155,7 @@ public abstract class MixinGoalSelector {
     /**
      * Returns true if any controls of the specified goal are disabled.
      */
-    private boolean areControlsDisabled(WeightedGoal goal) {
+    private boolean areControlsDisabled(PrioritizedGoal goal) {
         for (Goal.Control control : getControls(goal)) {
             if (this.isControlDisabled(control)) {
                 return true;
@@ -169,13 +169,13 @@ public abstract class MixinGoalSelector {
      * Returns true if all controls for the specified goal are either available (not acquired by another goal) or replaceable
      * (acquired by another goal, but eligible for replacement) and not disabled for the entity.
      */
-    private boolean areGoalControlsAvailable(WeightedGoal goal) {
+    private boolean areGoalControlsAvailable(PrioritizedGoal goal) {
         for (Goal.Control control : getControls(goal)) {
             if (this.isControlDisabled(control)) {
                 return false;
             }
 
-            WeightedGoal occupied = this.getGoalOccupyingControl(control);
+            PrioritizedGoal occupied = this.getGoalOccupyingControl(control);
 
             if (occupied != null && !occupied.canBeReplacedBy(goal)) {
                 return false;
@@ -213,21 +213,21 @@ public abstract class MixinGoalSelector {
     /**
      * Returns the goal which is currently holding the specified control, or null if no goal is.
      */
-    private WeightedGoal getGoalOccupyingControl(Goal.Control control) {
+    private PrioritizedGoal getGoalOccupyingControl(Goal.Control control) {
         return this.goalsByControlArray[control.ordinal()];
     }
 
     /**
      * Changes the goal which is currently holding onto a control.
      */
-    private void setGoalOccupyingControl(Goal.Control control, WeightedGoal goal) {
+    private void setGoalOccupyingControl(Goal.Control control, PrioritizedGoal goal) {
         this.goalsByControlArray[control.ordinal()] = goal;
     }
 
     /**
      * Helper method which accesses the flat required controls array from a goal.
      */
-    private static Goal.Control[] getControls(WeightedGoal goal) {
+    private static Goal.Control[] getControls(PrioritizedGoal goal) {
         return ((GoalExtended) goal.getGoal()).getRequiredControls();
     }
 }
