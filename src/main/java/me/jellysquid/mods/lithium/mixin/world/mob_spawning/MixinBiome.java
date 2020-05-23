@@ -1,6 +1,7 @@
 package me.jellysquid.mods.lithium.mixin.world.mob_spawning;
 
 import com.google.common.collect.Maps;
+import me.jellysquid.mods.lithium.common.util.collections.HashedList;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.world.biome.Biome;
 import org.spongepowered.asm.mixin.Final;

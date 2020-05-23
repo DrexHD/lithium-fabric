@@ -34,7 +34,7 @@ public abstract class MixinGoalSelector {
 
     @Shadow
     @Final
-    private Map<Goal.Control, WeightedGoal> goalsByControl;
+    private Map<Goal.Control, PrioritizedGoal> goalsByControl;
 
     /**
      * Replace the goal set with an optimized collection type which performs better for iteration.
@@ -123,7 +123,7 @@ public abstract class MixinGoalSelector {
             }
 
             // Hand over controls to this goal and stop any goals which depended on those controls
-            for (Goal.Control control : getControls(goal)) {
+            for (Goal.Control control : goal.getControls()) {
                 PrioritizedGoal otherGoal = this.getGoalOccupyingControl(control);
 
                 if (otherGoal != null) {
@@ -157,7 +157,7 @@ public abstract class MixinGoalSelector {
      * Returns true if any controls of the specified goal are disabled.
      */
     private boolean areControlsDisabled(PrioritizedGoal goal) {
-        for (Goal.Control control : getControls(goal)) {
+        for (Goal.Control control : goal.getControls()) {
             if (this.isControlDisabled(control)) {
                 return true;
             }
