@@ -16,9 +16,7 @@ import org.spongepowered.asm.mixin.Shadow;
  * method invocations between interface boundaries, helping the JVM to inline and optimize code.
  */
 @Mixin(World.class)
-public abstract class MixinWorld implements WorldView, CollisionView, WorldAccess {
-
-
+public abstract class MixinWorld implements WorldView, CollisionView {
     /**
      * @reason Remove dynamic-dispatch and inline call
      * @author JellySquid
@@ -54,7 +52,8 @@ public abstract class MixinWorld implements WorldView, CollisionView, WorldAcces
     }
 
     private Chunk getChunkLithium(int chunkX, int chunkZ, ChunkStatus leastStatus, boolean create) {
-        Chunk chunk = this.getChunkManager().getChunk(chunkX, chunkZ, leastStatus, create);
+        //todo think about caching getChunkManager in a field
+        Chunk chunk = ((WorldAccess)this).getChunkManager().getChunk(chunkX, chunkZ, leastStatus, create);
 
         if (chunk == null && create) {
             throw new IllegalStateException("Should always be able to create a chunk!");

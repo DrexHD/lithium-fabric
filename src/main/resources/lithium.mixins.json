@@ -34,6 +34,7 @@
         "alloc.enum_values.MixinPistonHandler",
         "biome.MixinVoronoiBiomeAccessType",
         "block.flatten_states.MixinAbstractBlockState",
+      "block.flatten_states.MixinFluidState",
         "block.piston_shapes.MixinPistonHeadBlock",
         "cached_hashcode.MixinBlockNeighborGroup",
         "chunk.no_locking.MixinPalettedContainer",

@@ -1,6 +1,7 @@
 package me.jellysquid.mods.lithium.common.world.chunk;
 
 import net.minecraft.world.chunk.Palette;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
 public interface CompactingPackedIntegerArray {
     /**
@@ -8,4 +9,6 @@ public interface CompactingPackedIntegerArray {
      * re-mapped using {@param destPalette}.
      */
     <T> void compact(Palette<T> srcPalette, Palette<T> dstPalette, short[] out);
+
+    int getElementBits();
 }

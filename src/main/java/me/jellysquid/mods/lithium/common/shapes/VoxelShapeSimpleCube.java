@@ -121,12 +121,12 @@ public class VoxelShapeSimpleCube extends VoxelShape implements VoxelShapeExtend
     }
 
     @Override
-    public double getMinimum(Direction.Axis axis) {
+    public double getMin(Direction.Axis axis) {
         return axis.choose(this.x1, this.y1, this.z1);
     }
 
     @Override
-    public double getMaximum(Direction.Axis axis) {
+    public double getMax(Direction.Axis axis) {
         return axis.choose(this.x2, this.y2, this.z2);
     }
 
@@ -174,11 +174,11 @@ public class VoxelShapeSimpleCube extends VoxelShape implements VoxelShapeExtend
 
     @Override
     protected int getCoordIndex(Direction.Axis axis, double coord) {
-        if (coord < this.getMinimum(axis)) {
+        if (coord < this.getMin(axis)) {
             return -1;
         }
 
-        if (coord >= this.getMaximum(axis)) {
+        if (coord >= this.getMax(axis)) {
             return 1;
         }
 

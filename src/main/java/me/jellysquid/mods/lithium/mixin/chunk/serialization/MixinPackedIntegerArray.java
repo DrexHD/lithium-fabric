@@ -6,12 +6,13 @@ import net.minecraft.world.chunk.Palette;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.gen.Accessor;
 
 /**
  * Extends {@link PackedIntegerArray} with a special compaction method defined in {@link CompactingPackedIntegerArray}.
  */
 @Mixin(PackedIntegerArray.class)
-public class MixinPackedIntegerArray implements CompactingPackedIntegerArray {
+public abstract class MixinPackedIntegerArray implements CompactingPackedIntegerArray {
     @Shadow
     @Final
     private long[] storage;
@@ -31,6 +32,9 @@ public class MixinPackedIntegerArray implements CompactingPackedIntegerArray {
     @Shadow
     @Final
     private int field_24079;
+
+    @Accessor
+    public abstract int getElementBits();
 
     @Override
     public <T> void compact(Palette<T> srcPalette, Palette<T> dstPalette, short[] out) {

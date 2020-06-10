@@ -134,7 +134,7 @@ public abstract class MixinPalettedContainer<T> {
      */
 /*    @Inject(method = "count", at = @At("HEAD"), cancellable = true)
     public void count(PalettedContainer.CountConsumer<T> consumer, CallbackInfo ci) {
-        int len = (1 << this.data.getElementBits());
+        int len = (1 << ((CompactingPackedIntegerArray)this.data).getElementBits());
 
         // Do not allocate huge arrays if we're using a large palette
         if (len > 4096) {

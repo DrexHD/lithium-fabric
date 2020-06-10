@@ -17,14 +17,16 @@ import java.util.Map;
  */
 @Mixin(PointOfInterestType.class)
 public class MixinPointOfInterestType {
-    @Mutable
-    @Shadow
-    @Final
-    private static Map<BlockState, PointOfInterestType> BLOCK_STATE_TO_POINT_OF_INTEREST_TYPE;
+//todo adapt to the 1.16 system
 
-    static {
-        BLOCK_STATE_TO_POINT_OF_INTEREST_TYPE = new Reference2ReferenceOpenHashMap<>(BLOCK_STATE_TO_POINT_OF_INTEREST_TYPE);
-
-        PointOfInterestTypeHelper.init(new ObjectArraySet<>(BLOCK_STATE_TO_POINT_OF_INTEREST_TYPE.keySet()));
-    }
+//    @Mutable
+//    @Shadow
+//    @Final
+//    private static Map<BlockState, PointOfInterestType> BLOCK_STATE_TO_POINT_OF_INTEREST_TYPE;
+//
+//    static {
+//        BLOCK_STATE_TO_POINT_OF_INTEREST_TYPE = new Reference2ReferenceOpenHashMap<>(BLOCK_STATE_TO_POINT_OF_INTEREST_TYPE);
+//
+//        PointOfInterestTypeHelper.init(new ObjectArraySet<>(BLOCK_STATE_TO_POINT_OF_INTEREST_TYPE.keySet()));
+//    }
 }

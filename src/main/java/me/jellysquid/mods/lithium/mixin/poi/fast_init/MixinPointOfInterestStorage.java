@@ -29,6 +29,11 @@ public abstract class MixinPointOfInterestStorage extends SerializingRegionBased
     @Shadow
     protected abstract void scanAndPopulate(ChunkSection section, ChunkSectionPos sectionPos, BiConsumer<BlockPos, PointOfInterestType> entryConsumer);
 
+    @Shadow
+    private static boolean shouldScan(ChunkSection chunkSection) {
+        throw new AssertionError();
+    }
+
     /**
      * @reason Avoid Stream API
      * @author Jellysquid
@@ -41,12 +46,13 @@ public abstract class MixinPointOfInterestStorage extends SerializingRegionBased
 
         if (set != null) {
             set.updatePointsOfInterest((consumer) -> {
-                if (PointOfInterestTypeHelper.shouldScan(section)) {
+                //todo use PointOfInterestTypeHelper.shouldScan again when available
+                if (shouldScan(section)) {
                     this.scanAndPopulate(section, sectionPos, consumer);
                 }
             });
         } else {
-            if (PointOfInterestTypeHelper.shouldScan(section)) {
+            if (shouldScan(section)) {
                 set = this.getOrCreate(sectionPos.asLong());
 
                 this.scanAndPopulate(section, sectionPos, set::add);

@@ -1,7 +1,7 @@
 package me.jellysquid.mods.lithium.common.ai;
 
 import net.minecraft.util.collection.WeightedList;
-
+import net.minecraft.util.collection.WeightedList.Entry;
 import java.util.Iterator;
 
 public interface WeightedListIterable<U> extends Iterable<U> {

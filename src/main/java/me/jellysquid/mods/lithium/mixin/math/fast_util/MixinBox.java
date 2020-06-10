@@ -47,12 +47,12 @@ public class MixinBox {
      */
     @Overwrite
     public double getMin(Direction.Axis axis) {
-        switch (axis) {
-            case X:
+        switch (axis.ordinal()) {
+            case 0: //X
                 return this.minX;
-            case Y:
+            case 1: //Y
                 return this.minY;
-            case Z:
+            case 2: //Z
                 return this.minZ;
         }
 
@@ -65,12 +65,12 @@ public class MixinBox {
      */
     @Overwrite
     public double getMax(Direction.Axis axis) {
-        switch (axis) {
-            case X:
+        switch (axis.ordinal()) {
+            case 0: //X
                 return this.maxX;
-            case Y:
+            case 1: //Y
                 return this.maxY;
-            case Z:
+            case 2: //Z
                 return this.maxZ;
         }
 
