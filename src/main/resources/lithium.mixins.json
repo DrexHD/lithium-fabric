@@ -29,7 +29,6 @@
         "ai.task.MixinWeightedList",
         "alloc.chunk_random.MixinServerWorld",
         "alloc.chunk_random.MixinWorld",
-        "alloc.enum_values.MixinLivingEntity",
         "alloc.enum_values.MixinPistonBlock",
         "alloc.enum_values.MixinPistonHandler",
         "biome.MixinVoronoiBiomeAccessType",
