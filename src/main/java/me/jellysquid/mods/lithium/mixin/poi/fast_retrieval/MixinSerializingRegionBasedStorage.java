@@ -43,7 +43,7 @@ public abstract class MixinSerializingRegionBasedStorage<R> implements RegionBas
     private Long2ObjectOpenHashMap<BitSet> columns;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void init(File directory, Function<Runnable, Codec<R>> function, Function<Runnable, R> function2, DataFixer dataFixer, DataFixTypes dataFixTypes, boolean bl, CallbackInfo ci) {
+    private void init(File directory, Function<Runnable, Codec<R>> function, Function<Runnable, R> function2, DataFixer dataFixer, DataFixTypes dataFixTypes, boolean sync, CallbackInfo ci) {
         this.columns = new Long2ObjectOpenHashMap<>();
         this.loadedElements = new ListeningLong2ObjectOpenHashMap<>(this::onEntryAdded, this::onEntryRemoved);
     }

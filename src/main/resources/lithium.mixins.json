@@ -33,7 +33,6 @@
         "alloc.enum_values.MixinPistonHandler",
         "biome.MixinVoronoiBiomeAccessType",
         "block.flatten_states.MixinAbstractBlockState",
-      "block.flatten_states.MixinFluidState",
         "block.piston_shapes.MixinPistonHeadBlock",
         "cached_hashcode.MixinBlockNeighborGroup",
         "chunk.no_locking.MixinPalettedContainer",
@@ -76,7 +75,9 @@
         "world.chunk_ticking.MixinPlayerChunkWatchingManager",
         "world.chunk_ticking.MixinThreadedAnvilChunkStorage",
         "world.explosions.MixinExplosion",
-        "world.fire_checks.MixinWorld",
+        "world.layer_caching.MixinBiomeLayerSampler",
+        "world.layer_caching.MixinCachingLayerContext",
+        "world.layer_caching.MixinParentedLayer",
         "world.mob_spawning.MixinBiome",
         "world.player_chunk_tick.MixinThreadedAnvilChunkStorage",
         "world.tick_scheduler.MixinServerWorld"

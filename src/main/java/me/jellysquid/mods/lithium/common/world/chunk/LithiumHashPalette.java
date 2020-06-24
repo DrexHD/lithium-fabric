@@ -96,8 +96,8 @@ public class LithiumHashPalette<T> implements Palette<T> {
 
     @Override
     public boolean accepts(Predicate<T> predicate) {
-        for(T obj : this.table.keySet()) {
-            if (predicate.test(obj)) {
+        for (int i = 0; i < this.size; ++i) {
+            if (predicate.test(this.entries[i])) {
                 return true;
             }
         }

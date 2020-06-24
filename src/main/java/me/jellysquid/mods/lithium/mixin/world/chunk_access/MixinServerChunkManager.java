@@ -77,8 +77,9 @@ public abstract class MixinServerChunkManager {
     @Overwrite
     public Chunk getChunk(int x, int z, ChunkStatus status, boolean create) {
         if (Thread.currentThread() != this.serverThread) {
-            return CompletableFuture.supplyAsync(() -> this.getChunk(x, z, status, create), this.mainThreadExecutor).join();
+            return this.getChunkOffThread(x, z, status, create);
         }
+
         // Store a local reference to the cached keys array in order to prevent bounds checks later
         long[] cacheKeys = this.cacheKeys;
 
@@ -108,6 +109,12 @@ public abstract class MixinServerChunkManager {
         }
 
         return chunk;
+    }
+
+    private Chunk getChunkOffThread(int x, int z, ChunkStatus status, boolean create) {
+        return CompletableFuture.supplyAsync(() -> {
+            return this.getChunk(x, z, status, create);
+        }, this.mainThreadExecutor).join();
     }
 
     /**
