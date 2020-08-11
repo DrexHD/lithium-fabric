@@ -25,4 +25,6 @@ public interface ChunkHolderExtended {
      * @return True if the chunk needs a new ticket to be created in order to retain it, otherwise false
      */
     boolean updateLastAccessTime(long time);
+
+    void combineSaveFuture(CompletableFuture<? extends Either<? extends Chunk, ChunkHolder.Unloaded>> then);
 }

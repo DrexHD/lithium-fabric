@@ -12,10 +12,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 
 @Mixin(ChunkHolder.class)
-public class ChunkHolderMixin implements ChunkHolderExtended {
+public abstract class ChunkHolderMixin implements ChunkHolderExtended {
     @Shadow
     @Final
     private AtomicReferenceArray<CompletableFuture<Either<Chunk, ChunkHolder.Unloaded>>> futuresByStatus;
+
+    @Shadow
+    protected abstract void combineSavingFuture(CompletableFuture<? extends Either<? extends Chunk, ChunkHolder.Unloaded>> then);
 
     private long lastRequestTime;
 
@@ -35,5 +38,10 @@ public class ChunkHolderMixin implements ChunkHolderExtended {
         this.lastRequestTime = time;
 
         return prev != time;
+    }
+
+    @Override
+    public void combineSaveFuture(CompletableFuture<? extends Either<? extends Chunk, ChunkHolder.Unloaded>> then) {
+        this.combineSavingFuture(then);
     }
 }
