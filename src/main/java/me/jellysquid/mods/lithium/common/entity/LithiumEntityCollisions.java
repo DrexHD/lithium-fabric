@@ -112,7 +112,7 @@ public class LithiumEntityCollisions {
             @Override
             public boolean computeNext(Consumer<? super VoxelShape> consumer) {
                 if (this.it == null) {
-                    this.it = view.getEntities(entity, box).iterator();
+                    this.it = view.getOtherEntities(entity, box).iterator();
                 }
 
                 while (this.it.hasNext()) {
@@ -126,7 +126,7 @@ public class LithiumEntityCollisions {
                         continue;
                     }
 
-                    Box otherEntityBox = otherEntity.getCollisionBox();
+                    Box otherEntityBox = otherEntity.getBoundingBox();
 
                     boolean produced = false;
 
@@ -140,16 +140,7 @@ public class LithiumEntityCollisions {
                     }
 
                     if (entity != null) {
-                        Box otherEntityHardBox = entity.getHardCollisionBox(otherEntity);
-
-                        if (otherEntityHardBox != null && box.intersects(otherEntityHardBox)) {
-                            if (consumer == null) {
-                                return true;
-                            } else {
-                                produced = true;
-                                consumer.accept(VoxelShapes.cuboid(otherEntityHardBox));
-                            }
-                        }
+                        return entity.method_30949(otherEntity);
                     }
 
                     if (produced) {

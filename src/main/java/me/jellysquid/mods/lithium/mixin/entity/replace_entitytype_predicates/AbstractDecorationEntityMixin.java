@@ -30,6 +30,6 @@ public abstract class AbstractDecorationEntityMixin extends Entity{
         if (predicate == PREDICATE) {
             return WorldHelper.getEntitiesOfClass(world, excluded, AbstractDecorationEntity.class, box);
         }
-        return world.getEntities(excluded, box, predicate);
+        return world.getOtherEntities(excluded, box, predicate);
     }
 }

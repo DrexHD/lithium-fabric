@@ -26,7 +26,7 @@ public class BlockShapeCacheMixin implements BlockShapeCacheExtended {
 
     @Shadow
     @Final
-    protected boolean[] solidFullSquare;
+    protected boolean[] solidSides;
 
     @Shadow
     @Final
@@ -48,7 +48,7 @@ public class BlockShapeCacheMixin implements BlockShapeCacheExtended {
         VoxelShape shape = state.getSidesShape(EmptyBlockView.INSTANCE, BlockPos.ORIGIN);
 
         // If the shape is a full cube and the top face is a full square, it can always support another component
-        this.hasTopRim = (this.isFullCube && this.solidFullSquare[Direction.UP.ordinal()]) ||
+        this.hasTopRim = (this.isFullCube && this.solidSides[Direction.UP.ordinal()]) ||
                 BlockShapeHelper.sideCoversSquare(shape.getFace(Direction.UP), BlockShapeHelper.SOLID_MEDIUM_SQUARE_SHAPE);
 
         for (Direction side : DIRECTIONS) {
@@ -57,7 +57,7 @@ public class BlockShapeCacheMixin implements BlockShapeCacheExtended {
                 continue;
             }
 
-            if (this.solidFullSquare[side.ordinal()] || BlockShapeHelper.sideCoversSquare(shape.getFace(side), BlockShapeHelper.SOLID_SMALL_SQUARE_SHAPE)) {
+            if (this.solidSides[side.ordinal()] || BlockShapeHelper.sideCoversSquare(shape.getFace(side), BlockShapeHelper.SOLID_SMALL_SQUARE_SHAPE)) {
                 this.sideCoversSmallSquare |= (1 << side.ordinal());
             }
         }
