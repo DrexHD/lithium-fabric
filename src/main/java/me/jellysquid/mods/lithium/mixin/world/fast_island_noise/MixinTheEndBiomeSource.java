@@ -1,6 +1,8 @@
 package me.jellysquid.mods.lithium.mixin.world.fast_island_noise;
 
 import me.jellysquid.mods.lithium.common.world.noise.SimplexNoiseCache;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.biome.Biome;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,7 +21,7 @@ public class MixinTheEndBiomeSource {
     private ThreadLocal<SimplexNoiseCache> tlCache;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void hookConstructor(long seed, CallbackInfo ci) {
+    private void hookConstructor(Registry<Biome> registry, long l, CallbackInfo ci) {
         tlCache = ThreadLocal.withInitial(() -> new SimplexNoiseCache(this.noise));
     }
 
