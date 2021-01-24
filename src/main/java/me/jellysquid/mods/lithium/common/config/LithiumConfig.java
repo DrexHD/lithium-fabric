@@ -97,7 +97,6 @@ public class LithiumConfig {
         this.addMixinRule("tag", true);
 
         this.addMixinRule("world", true);
-        this.addMixinRule("world.block_entity_ticking", true);
         this.addMixinRule("world.chunk_access", true);
         this.addMixinRule("world.chunk_inline_block_access", true);
         this.addMixinRule("world.chunk_task_system", true);
