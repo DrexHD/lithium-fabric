@@ -39,7 +39,7 @@ public class LithiumEntityShapeContext implements ShapeContext {
     }
 
     @Override
-    public boolean method_27866(FluidState aboveState, FlowableFluid fluid) {
+    public boolean canWalkOnFluid(FluidState aboveState, FlowableFluid fluid) {
         return this.entity instanceof LivingEntity && ((LivingEntity) this.entity).canWalkOnFluid(fluid) && !aboveState.getFluid().matchesType(fluid);
     }
 
