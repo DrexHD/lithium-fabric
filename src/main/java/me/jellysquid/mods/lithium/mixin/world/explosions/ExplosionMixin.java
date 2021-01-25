@@ -210,8 +210,9 @@ public abstract class ExplosionMixin {
         BlockPos pos = this.cachedPos.set(blockX, blockY, blockZ);
 
         // Early-exit if the y-coordinate is out of bounds.
-        if (World.isOutOfBuildLimitVertically(blockY)) {
+        if (this.world.isOutOfHeightLimit(blockY)) {
             Optional<Float> blastResistance = this.behavior.getBlastResistance((Explosion) (Object) this, this.world, pos, Blocks.AIR.getDefaultState(), Fluids.EMPTY.getDefaultState());
+            //noinspection OptionalIsPresent
             if (blastResistance.isPresent()) {
                 return (blastResistance.get() + 0.3F) * 0.3F;
             }
@@ -339,7 +340,7 @@ public abstract class ExplosionMixin {
             if (entity instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) entity;
 
-                if (!player.isSpectator() && (!player.isCreative() || !player.abilities.flying)) {
+                if (!player.isSpectator() && (!player.isCreative() || !player.getAbilities().flying)) {
                     this.affectedPlayers.put(player, new Vec3d(distXSq * damage, distYSq * damage, distZSq * damage));
                 }
             }

@@ -30,7 +30,7 @@ public class LithiumConfig {
 
         this.addMixinRule("ai", true);
         this.addMixinRule("ai.goal", true);
-        this.addMixinRule("ai.nearby_entity_tracking", true);
+        this.addMixinRule("ai.nearby_entity_tracking", false); //todo implement for 1.17
         this.addMixinRule("ai.pathing", true);
         this.addMixinRule("ai.poi", true);
         this.addMixinRule("ai.raid", true);
@@ -42,7 +42,6 @@ public class LithiumConfig {
         this.addMixinRule("alloc.composter", true);
         this.addMixinRule("alloc.entity_tracker", true);
         this.addMixinRule("alloc.enum_values", true);
-        this.addMixinRule("alloc.world_ticking", true);
 
         this.addMixinRule("block", true);
         this.addMixinRule("block.flatten_states", true);
@@ -85,7 +84,9 @@ public class LithiumConfig {
         this.addMixinRule("gen.voronoi_biomes", true);
 
         this.addMixinRule("math", true);
+        this.addMixinRule("math.fast_blockpos", true);
         this.addMixinRule("math.fast_util", true);
+        this.addMixinRule("math.sine_lut", true);
 
         this.addMixinRule("shapes", true);
         this.addMixinRule("shapes.blockstate_cache", true);

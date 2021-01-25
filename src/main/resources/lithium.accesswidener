@@ -21,7 +21,7 @@ accessible field net/minecraft/server/world/ThreadedAnvilChunkStorage$EntityTrac
 extendable class net/minecraft/world/biome/layer/util/CachingLayerSampler
 accessible field net/minecraft/world/biome/layer/util/CachingLayerSampler operator Lnet/minecraft/world/biome/layer/util/LayerOperator;
 
-accessible field net/minecraft/util/math/noise/SimplexNoiseSampler gradients [[I
+accessible field net/minecraft/util/math/noise/SimplexNoiseSampler GRADIENTS [[I
 
 accessible class net/minecraft/server/world/ChunkTicketManager$TicketDistanceLevelPropagator
 accessible method net/minecraft/world/ChunkPosDistanceLevelPropagator updateLevel (JIZ)V
@@ -38,3 +38,6 @@ accessible field net/minecraft/util/shape/VoxelShape voxels Lnet/minecraft/util/
 accessible method me/jellysquid/mods/lithium/mixin/world/block_entity_ticking/WorldMixin getPendingBlockEntity (Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/entity/BlockEntity
 
 accessible field net/minecraft/util/math/MathHelper SINE_TABLE [F
+
+accessible class net/minecraft/server/world/ServerWorld$EntityLoader
+accessible method net/minecraft/world/World isInvalidVertically (I)Z

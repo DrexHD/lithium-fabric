@@ -4,6 +4,7 @@ import me.jellysquid.mods.lithium.common.entity.EntityNavigationExtended;
 import me.jellysquid.mods.lithium.common.world.ServerWorldExtended;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.ai.pathing.Path;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
@@ -30,6 +31,10 @@ public abstract class EntityNavigationMixin implements EntityNavigationExtended 
     @Shadow
     public abstract Path findPathTo(BlockPos target, int distance);
 
+    @Shadow
+    @Final
+    protected MobEntity entity;
+
     @Redirect(method = "recalculatePath",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/entity/ai/pathing/EntityNavigation;findPathTo(Lnet/minecraft/util/math/BlockPos;I)Lnet/minecraft/entity/ai/pathing/Path;")
@@ -38,9 +43,9 @@ public abstract class EntityNavigationMixin implements EntityNavigationExtended 
         Path pathTo = this.findPathTo(target, distance);
         if (this.canListenForBlocks && ((pathTo == null) != (this.currentPath == null))) {
             if (pathTo == null) {
-                ((ServerWorldExtended) this.world).setNavigationInactive(this);
+                ((ServerWorldExtended) this.world).setNavigationInactive(this.entity);
             } else {
-                ((ServerWorldExtended) this.world).setNavigationActive(this);
+                ((ServerWorldExtended) this.world).setNavigationActive(this.entity);
             }
         }
         return pathTo;
@@ -50,9 +55,9 @@ public abstract class EntityNavigationMixin implements EntityNavigationExtended 
     private void updateListeningState2(Path path, double speed, CallbackInfoReturnable<Boolean> cir) {
         if (this.canListenForBlocks) {
             if (this.currentPath == null) {
-                ((ServerWorldExtended) this.world).setNavigationInactive(this);
+                ((ServerWorldExtended) this.world).setNavigationInactive(this.entity);
             } else {
-                ((ServerWorldExtended) this.world).setNavigationActive(this);
+                ((ServerWorldExtended) this.world).setNavigationActive(this.entity);
             }
         }
     }
@@ -60,7 +65,7 @@ public abstract class EntityNavigationMixin implements EntityNavigationExtended 
     @Inject(method = "stop", at = @At(value = "RETURN"))
     private void stopListening(CallbackInfo ci) {
         if (this.canListenForBlocks) {
-            ((ServerWorldExtended) this.world).setNavigationInactive(this);
+            ((ServerWorldExtended) this.world).setNavigationInactive(this.entity);
         }
     }
 
