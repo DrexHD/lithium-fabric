@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
  * Extends {@link PackedIntegerArray} with a special compaction method defined in {@link CompactingPackedIntegerArray}.
  */
 @Mixin(PackedIntegerArray.class)
-public abstract class PackedIntegerArrayMixin implements CompactingPackedIntegerArray {
+public class PackedIntegerArrayMixin implements CompactingPackedIntegerArray {
     @Shadow
     @Final
     private long[] storage;
