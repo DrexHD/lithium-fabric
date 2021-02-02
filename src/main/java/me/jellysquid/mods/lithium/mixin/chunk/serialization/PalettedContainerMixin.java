@@ -39,7 +39,7 @@ public abstract class PalettedContainerMixin<T> {
 
     @Shadow
     @Final
-    private T defaultValue;
+    private T field_12935;
 
     @Shadow
     @Final
@@ -85,7 +85,7 @@ public abstract class PalettedContainerMixin<T> {
             palette = ((LithiumHashPalette<T>) this.palette);
 
             // The palette only contains the default block, so don't re-pack
-            if (palette.getSize() == 1 && palette.getByIndex(0) == this.defaultValue) {
+            if (palette.getSize() == 1 && palette.getByIndex(0) == this.field_12935) {
                 dataArray = EMPTY_PALETTE_DATA;
             }
         }
@@ -93,7 +93,7 @@ public abstract class PalettedContainerMixin<T> {
         // If we aren't going to use an empty data array, start a compaction
         if (dataArray == null) {
             LithiumHashPalette<T> compactedPalette = new LithiumHashPalette<>(this.idList, this.paletteSize, null, this.elementDeserializer, this.elementSerializer);
-            compactedPalette.getIndex(this.defaultValue);
+            compactedPalette.getIndex(this.field_12935);
 
             short[] array = cachedCompactionArrays.get();
             ((CompactingPackedIntegerArray) this.data).compact(this.palette, compactedPalette, array);

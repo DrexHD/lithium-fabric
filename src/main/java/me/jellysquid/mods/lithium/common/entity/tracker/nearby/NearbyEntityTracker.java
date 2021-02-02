@@ -25,7 +25,7 @@ public class NearbyEntityTracker<T extends LivingEntity> implements NearbyEntity
         this.clazz = clazz;
         this.self = self;
         this.rangeSq = range * range;
-        this.rangeC = Math.max((MathHelper.ceil(range) + 15) >> 4, 1);
+        this.rangeC = Math.min(MathHelper.ceil(range) >> 4, 1);
     }
 
     @Override
@@ -83,10 +83,5 @@ public class NearbyEntityTracker<T extends LivingEntity> implements NearbyEntity
         }
 
         return null;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + " for entity class: " + clazz.getName() + ", in rangeSq: " + rangeSq + ", around entity: " + self.toString();
     }
 }

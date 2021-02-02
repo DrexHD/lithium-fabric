@@ -24,15 +24,16 @@ public class LithiumMixinPlugin implements IMixinConfigPlugin {
     @Override
     public void onLoad(String mixinPackage) {
         try {
-            this.config = LithiumConfig.load(new File("./config/lithium.properties"));
+            this.config = LithiumConfig.load(new File("./config/lithium.properties"), "/lithium.mixins.json");
         } catch (Exception e) {
             throw new RuntimeException("Could not load configuration file for Lithium", e);
         }
 
-        this.logger.info("Loaded configuration file for Lithium: {} options available, {} override(s) found",
+        this.logger.info("Loaded configuration file for Lithium ({} options available, {} user overrides)",
                 this.config.getOptionCount(), this.config.getOptionOverrideCount());
+        this.logger.info("Lithium has been successfully discovered and initialized -- your game is now faster!");
 
-        LithiumMod.CONFIG = this.config;
+        LithiumMod.CONFIG = config;
     }
 
     @Override
@@ -43,36 +44,17 @@ public class LithiumMixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         if (!mixinClassName.startsWith(MIXIN_PACKAGE_ROOT)) {
-            this.logger.error("Expected mixin '{}' to start with package root '{}', treating as foreign and " +
-                            "disabling!", mixinClassName, MIXIN_PACKAGE_ROOT);
-
-            return false;
+            return true;
         }
 
         String mixin = mixinClassName.substring(MIXIN_PACKAGE_ROOT.length());
-        Option option = this.config.getEffectiveOptionForMixin(mixin);
+        Option option = this.config.getOptionForMixin(mixin);
 
-        if (option == null) {
-            this.logger.error("No rules matched mixin '{}', treating as foreign and disabling!", mixin);
-
-            return false;
-        }
-
-        if (option.isOverridden()) {
-            String source = "[unknown]";
-
-            if (option.isUserDefined()) {
-                source = "user configuration";
-            } else if (option.isModDefined()) {
-                source = "mods [" + String.join(", ", option.getDefiningMods()) + "]";
-            }
-
+        if (option.isUserDefined()) {
             if (option.isEnabled()) {
-                this.logger.warn("Force-enabling mixin '{}' as rule '{}' (added by {}) enables it", mixin,
-                        option.getName(), source);
+                this.logger.warn("Applying mixin '{}' as user configuration forcefully enables it", mixin);
             } else {
-                this.logger.warn("Force-disabling mixin '{}' as rule '{}' (added by {}) disables it and children", mixin,
-                        option.getName(), source);
+                this.logger.warn("Not applying mixin '{}' as user configuration forcefully disables it", mixin);
             }
         }
 

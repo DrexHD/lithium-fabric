@@ -1,10 +1,9 @@
 package me.jellysquid.mods.lithium.common.config;
 
-import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.api.metadata.CustomValue;
-import net.fabricmc.loader.api.metadata.CustomValue.CvType;
-import net.fabricmc.loader.api.metadata.ModMetadata;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,96 +19,57 @@ import java.util.Properties;
 public class LithiumConfig {
     private static final Logger LOGGER = LogManager.getLogger("LithiumConfig");
 
-    private static final String JSON_KEY_LITHIUM_OPTIONS = "lithium:options";
-
     private final Map<String, Option> options = new HashMap<>();
 
     private LithiumConfig() {
-        // Defines the default rules which can be configured by the user or other mods.
-        // You must manually add a rule for any new mixins not covered by an existing package rule.
+        this.addDefaultMixinOption("chunk.no_locking", false);
+    }
 
-        this.addMixinRule("ai", true);
-        this.addMixinRule("ai.goal", true);
-        this.addMixinRule("ai.nearby_entity_tracking", true);
-        this.addMixinRule("ai.pathing", true);
-        this.addMixinRule("ai.poi", true);
-        this.addMixinRule("ai.raid", true);
-        this.addMixinRule("ai.task", true);
-
-        this.addMixinRule("alloc", true);
-        this.addMixinRule("alloc.chunk_random", true);
-        this.addMixinRule("alloc.chunk_ticking", true);
-        this.addMixinRule("alloc.entity_tracker", true);
-        this.addMixinRule("alloc.enum_values", true);
-        this.addMixinRule("alloc.world_ticking", true);
-
-        this.addMixinRule("block", true);
-        this.addMixinRule("block.flatten_states", true);
-        this.addMixinRule("block.piston_shapes", true);
-
-        this.addMixinRule("cached_hashcode", true);
-
-        this.addMixinRule("chunk", true);
-        this.addMixinRule("chunk.no_locking", false);
-        this.addMixinRule("chunk.palette", true);
-        this.addMixinRule("chunk.serialization", true);
-
-        this.addMixinRule("collections", true);
-        this.addMixinRule("collections.entity_filtering", true);
-
-        this.addMixinRule("entity", true);
-        this.addMixinRule("entity.block_cache", true);
-        this.addMixinRule("entity.collisions", true);
-        this.addMixinRule("entity.data_tracker", true);
-        this.addMixinRule("entity.stream_entity_collisions_lazily", true);
-
-        this.addMixinRule("gen", true);
-        this.addMixinRule("gen.biome_noise_cache", true);
-        this.addMixinRule("gen.chunk_region", true);
-        this.addMixinRule("gen.fast_layer_sampling", true);
-        this.addMixinRule("gen.fast_multi_source_biomes", true);
-        this.addMixinRule("gen.fast_noise_interpolation", true);
-        this.addMixinRule("gen.perlin_noise", true);
-        this.addMixinRule("gen.voronoi_biomes", true);
-
-        this.addMixinRule("math", true);
-        this.addMixinRule("math.fast_util", true);
-
-        this.addMixinRule("shapes", true);
-        this.addMixinRule("shapes.blockstate_cache", true);
-        this.addMixinRule("shapes.precompute_shape_arrays", true);
-        this.addMixinRule("shapes.shape_merging", true);
-        this.addMixinRule("shapes.specialized_shapes", true);
-
-        this.addMixinRule("tag", true);
-
-        this.addMixinRule("world", true);
-        this.addMixinRule("world.chunk_access", true);
-        this.addMixinRule("world.chunk_inline_block_access", true);
-        this.addMixinRule("world.chunk_task_system", true);
-        this.addMixinRule("world.chunk_tickets", true);
-        this.addMixinRule("world.chunk_ticking", true);
-        this.addMixinRule("world.explosions", true);
-        this.addMixinRule("world.mob_spawning", true);
-        this.addMixinRule("world.player_chunk_tick", true);
-        this.addMixinRule("world.tick_scheduler", true);
+    private void addDefaultMixinOption(String mixin, boolean enabled) {
+        this.addDefaultOption(getMixinRuleName(mixin), enabled);
     }
 
     /**
-     * Defines a Mixin rule which can be configured by users and other mods.
-     * @throws IllegalStateException If a rule with that name already exists
-     * @param mixin The name of the mixin package which will be controlled by this rule
-     * @param enabled True if the rule will be enabled by default, otherwise false
+     * Adds a default rule entry which can later be modified by the user.
      */
-    private void addMixinRule(String mixin, boolean enabled) {
-        String name = getMixinRuleName(mixin);
+    private void addDefaultOption(String name, boolean enabled) {
+        this.options.put(name, new Option(enabled, false));
+    }
 
-        if (this.options.putIfAbsent(name, new Option(name, enabled, false)) != null) {
-            throw new IllegalStateException("Mixin rule already defined: " + mixin);
+    private void discoverMixins(String path) {
+        try (InputStream in = LithiumConfig.class.getResourceAsStream(path)) {
+            if (in == null) {
+                throw new IOException("Could not find mixin config at path: " + path);
+            }
+
+            JsonObject mixinConfig = new Gson().fromJson(new InputStreamReader(in), JsonObject.class);
+
+            this.addKnownMixins(mixinConfig.getAsJsonArray("mixins"));
+            this.addKnownMixins(mixinConfig.getAsJsonArray("client"));
+        } catch (IOException e) {
+            throw new RuntimeException("Could not examine mixin config", e);
         }
     }
 
-    private void readProperties(Properties props) {
+    private void addKnownMixins(JsonArray array) {
+        // Assume it's empty
+        if (array == null) {
+            return;
+        }
+
+        for (JsonElement e : array) {
+            String name = e.getAsString();
+            String packageName = name.substring(0, name.lastIndexOf('.'));
+
+            this.addKnownMixinName(packageName);
+        }
+    }
+
+    private void addKnownMixinName(String name) {
+        this.options.computeIfAbsent(getMixinRuleName(name), (key) -> new Option(true, false));
+    }
+
+    private void read(Properties props) {
         for (Map.Entry<Object, Object> entry : props.entrySet()) {
             String key = (String) entry.getKey();
             String value = (String) entry.getValue();
@@ -136,78 +96,26 @@ public class LithiumConfig {
         }
     }
 
-    private void applyModOverrides() {
-        for (ModContainer container : FabricLoader.getInstance().getAllMods()) {
-            ModMetadata meta = container.getMetadata();
-
-            if (meta.containsCustomValue(JSON_KEY_LITHIUM_OPTIONS)) {
-                CustomValue overrides = meta.getCustomValue(JSON_KEY_LITHIUM_OPTIONS);
-
-                if (overrides.getType() != CvType.OBJECT) {
-                    LOGGER.warn("Mod '{}' contains invalid Lithium option overrides, ignoring", meta.getId());
-                    continue;
-                }
-
-                for (Map.Entry<String, CustomValue> entry : overrides.getAsObject()) {
-                    this.applyModOverride(meta, entry.getKey(), entry.getValue());
-                }
-            }
-        }
-    }
-
-    private void applyModOverride(ModMetadata meta, String name, CustomValue value) {
-        Option option = this.options.get(name);
-
-        if (option == null) {
-            LOGGER.warn("Mod '{}' attempted to override option '{}', which doesn't exist, ignoring", meta.getId(), name);
-            return;
-        }
-
-        if (value.getType() != CvType.BOOLEAN) {
-            LOGGER.warn("Mod '{}' attempted to override option '{}' with an invalid value, ignoring", meta.getId(), name);
-            return;
-        }
-
-        boolean enabled = value.getAsBoolean();
-
-        // disabling the option takes precedence over enabling
-        if (!enabled && option.isEnabled()) {
-            option.clearModsDefiningValue();
-        }
-
-        if (!enabled || option.isEnabled() || option.getDefiningMods().isEmpty()) {
-            option.addModOverride(enabled, meta.getId());
-        }
-    }
-
     /**
-     * Returns the effective option for the specified class name. This traverses the package path of the given mixin
-     * and checks each root for configuration rules. If a configuration rule disables a package, all mixins located in
-     * that package and its children will be disabled. The effective option is that of the highest-priority rule, either
-     * a enable rule at the end of the chain or a disable rule at the earliest point in the chain.
-     *
-     * @return Null if no options matched the given mixin name, otherwise the effective option for this Mixin
+     * Returns the most specific Mixin rule for the specified class name.
      */
-    public Option getEffectiveOptionForMixin(String mixinClassName) {
-        int lastSplit = 0;
+    public Option getOptionForMixin(String mixinClassName) {
+        int start = 0;
+        int lastSplit = start;
         int nextSplit;
 
-        Option rule = null;
+        Option rule = new Option(true, false);
 
-        while ((nextSplit = mixinClassName.indexOf('.', lastSplit)) != -1) {
-            String key = getMixinRuleName(mixinClassName.substring(0, nextSplit));
+        while ((nextSplit = mixinClassName.indexOf('.', lastSplit + 1)) != -1) {
+            String key = getMixinRuleName(mixinClassName.substring(start, nextSplit));
 
             Option candidate = this.options.get(key);
 
             if (candidate != null) {
                 rule = candidate;
-
-                if (!rule.isEnabled()) {
-                    return rule;
-                }
             }
 
-            lastSplit = nextSplit + 1;
+            lastSplit = nextSplit;
         }
 
         return rule;
@@ -217,7 +125,7 @@ public class LithiumConfig {
      * Loads the configuration file from the specified location. If it does not exist, a new configuration file will be
      * created. The file on disk will then be updated to include any new options.
      */
-    public static LithiumConfig load(File file) {
+    public static LithiumConfig load(File file, String mixinPath) {
         if (!file.exists()) {
             try {
                 writeDefaultConfig(file);
@@ -237,8 +145,8 @@ public class LithiumConfig {
         }
 
         LithiumConfig config = new LithiumConfig();
-        config.readProperties(props);
-        config.applyModOverrides();
+        config.discoverMixins(mixinPath);
+        config.read(props);
 
         return config;
     }
@@ -275,7 +183,7 @@ public class LithiumConfig {
     public int getOptionOverrideCount() {
         return (int) this.options.values()
                 .stream()
-                .filter(Option::isOverridden)
+                .filter(Option::isUserDefined)
                 .count();
     }
 }

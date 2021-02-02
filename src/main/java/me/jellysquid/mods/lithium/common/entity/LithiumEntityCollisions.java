@@ -1,6 +1,6 @@
 package me.jellysquid.mods.lithium.common.entity;
 
-import me.jellysquid.mods.lithium.common.entity.movement.ChunkAwareBlockCollisionSweeper;
+import me.jellysquid.mods.lithium.common.entity.movement.BlockCollisionSweeper;
 import me.jellysquid.mods.lithium.common.util.Producer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Box;
@@ -32,7 +32,7 @@ public class LithiumEntityCollisions {
             return Stream.empty();
         }
 
-        final ChunkAwareBlockCollisionSweeper sweeper = new ChunkAwareBlockCollisionSweeper(world, entity, box);
+        final BlockCollisionSweeper sweeper = new BlockCollisionSweeper(world, entity, box);
 
         return StreamSupport.stream(new Spliterators.AbstractSpliterator<VoxelShape>(Long.MAX_VALUE, Spliterator.NONNULL | Spliterator.IMMUTABLE) {
             private boolean skipWorldBorderCheck = entity == null;
@@ -49,10 +49,14 @@ public class LithiumEntityCollisions {
                     }
                 }
 
-                VoxelShape shape = sweeper.step();
-                if (shape != null) {
-                    consumer.accept(shape);
-                    return true;
+                while (sweeper.step()) {
+                    VoxelShape shape = sweeper.getCollidedShape();
+
+                    if (shape != null) {
+                        consumer.accept(shape);
+
+                        return true;
+                    }
                 }
 
                 return false;
@@ -70,10 +74,15 @@ public class LithiumEntityCollisions {
             return false;
         }
 
-        final ChunkAwareBlockCollisionSweeper sweeper = new ChunkAwareBlockCollisionSweeper(world, entity, box);
+        final BlockCollisionSweeper sweeper = new BlockCollisionSweeper(world, entity, box);
 
-        VoxelShape shape = sweeper.step();
-        return shape != null;
+        while (sweeper.step()) {
+            if (sweeper.getCollidedShape() != null) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -86,7 +95,7 @@ public class LithiumEntityCollisions {
             return false;
         }
 
-        return getEntityCollisionProducer(view, entity, box.expand(EPSILON), predicate).computeNext(null);
+        return getEntityCollisionProducer(view, entity, box, predicate).computeNext(null);
     }
 
     /**
@@ -112,7 +121,7 @@ public class LithiumEntityCollisions {
             @Override
             public boolean computeNext(Consumer<? super VoxelShape> consumer) {
                 if (this.it == null) {
-                    this.it = view.getOtherEntities(entity, box).iterator();
+                    this.it = view.getEntities(entity, box).iterator();
                 }
 
                 while (this.it.hasNext()) {
@@ -126,7 +135,7 @@ public class LithiumEntityCollisions {
                         continue;
                     }
 
-                    Box otherEntityBox = otherEntity.getBoundingBox();
+                    Box otherEntityBox = otherEntity.getCollisionBox();
 
                     boolean produced = false;
 
@@ -140,7 +149,16 @@ public class LithiumEntityCollisions {
                     }
 
                     if (entity != null) {
-                        return entity.method_30949(otherEntity);
+                        Box otherEntityHardBox = entity.getHardCollisionBox(otherEntity);
+
+                        if (otherEntityHardBox != null && box.intersects(otherEntityHardBox)) {
+                            if (consumer == null) {
+                                return true;
+                            } else {
+                                produced = true;
+                                consumer.accept(VoxelShapes.cuboid(otherEntityHardBox));
+                            }
+                        }
                     }
 
                     if (produced) {

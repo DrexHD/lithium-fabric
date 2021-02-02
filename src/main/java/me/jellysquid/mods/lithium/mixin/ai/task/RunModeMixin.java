@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 public class RunModeMixin {
     @Mixin(targets = "net/minecraft/entity/ai/brain/task/CompositeTask$RunMode$1")
-    public static class RunOneMixin {
+    public static class MixinRunOne {
         /**
          * @reason Replace stream code with traditional iteration
          * @author JellySquid
@@ -28,7 +28,7 @@ public class RunModeMixin {
     }
 
     @Mixin(targets = "net/minecraft/entity/ai/brain/task/CompositeTask$RunMode$2")
-    public static class TryAllMixin {
+    public static class MixinTryAll {
         /**
          * @reason Replace stream code with traditional iteration
          * @author JellySquid
