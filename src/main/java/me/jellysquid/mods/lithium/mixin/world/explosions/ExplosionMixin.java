@@ -14,6 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkSection;
+import net.minecraft.world.dimension.DimensionTypes;
 import net.minecraft.world.explosion.Explosion;
 import net.minecraft.world.explosion.ExplosionBehavior;
 import org.spongepowered.asm.mixin.Final;
@@ -86,7 +87,7 @@ public abstract class ExplosionMixin {
         this.maxY = this.world.getTopY();
 
         boolean explodeAir = this.createFire; // air blocks are only relevant for the explosion when fire should be created inside them
-        if (!explodeAir && this.world.getDimension().hasEnderDragonFight()) {
+        if (!explodeAir && this.hasEnderDragonFight()) {
             float overestimatedExplosionRange = (8 + (int) (6f * this.power));
             int endPortalX = 0;
             int endPortalZ = 0;
@@ -96,6 +97,11 @@ public abstract class ExplosionMixin {
             }
         }
         this.explodeAirBlocks = explodeAir;
+    }
+
+    // VanillaCopy - ServerWorld#init
+    private boolean hasEnderDragonFight() {
+        return this.world.getRegistryKey() == World.END && this.world.method_40134().matchesKey(DimensionTypes.THE_END);
     }
 
     @Redirect(

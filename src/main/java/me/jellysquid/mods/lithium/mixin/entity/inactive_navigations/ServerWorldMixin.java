@@ -62,8 +62,8 @@ public abstract class ServerWorldMixin extends World implements ServerWorldExten
 
     private ReferenceOpenHashSet<EntityNavigation> activeNavigations;
 
-    protected ServerWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, RegistryEntry<DimensionType> registryEntry, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long seed) {
-        super(properties, registryRef, registryEntry, profiler, isClient, debugWorld, seed);
+    protected ServerWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, RegistryEntry<DimensionType> registryEntry, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long seed, int i) {
+        super(properties, registryRef, registryEntry, profiler, isClient, debugWorld, seed, i);
     }
 
     /**
