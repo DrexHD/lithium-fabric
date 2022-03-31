@@ -43,7 +43,7 @@ public abstract class ThreadedAnvilChunkStorageMixin {
         }
 
         ChunkSectionPos oldPos = player.getWatchedSection();
-        ChunkSectionPos newPos = ChunkSectionPos.method_42614(player);
+        ChunkSectionPos newPos = ChunkSectionPos.from(player);
 
         boolean isWatchingWorld = this.playerChunkWatchingManager.isWatchDisabled(player);
         boolean doesNotGenerateChunks = this.doesNotGenerateChunks(player);

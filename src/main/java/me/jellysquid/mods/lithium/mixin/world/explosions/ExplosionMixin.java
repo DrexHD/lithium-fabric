@@ -101,7 +101,7 @@ public abstract class ExplosionMixin {
 
     // VanillaCopy - ServerWorld#init
     private boolean hasEnderDragonFight() {
-        return this.world.getRegistryKey() == World.END && this.world.method_40134().matchesKey(DimensionTypes.THE_END);
+        return this.world.getRegistryKey() == World.END && this.world.getDimensionEntry().matchesKey(DimensionTypes.THE_END);
     }
 
     @Redirect(
