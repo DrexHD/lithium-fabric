@@ -17,6 +17,7 @@ import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.dimension.DimensionTypes;
 import net.minecraft.world.explosion.Explosion;
 import net.minecraft.world.explosion.ExplosionBehavior;
+import net.minecraft.world.gen.random.AbstractRandom;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -132,7 +133,7 @@ public abstract class ExplosionMixin {
         // compared to a memory allocation and associated overhead of hashing real objects in a set.
         final LongOpenHashSet touched = new LongOpenHashSet(0);
 
-        final Random random = this.world.random;
+        final AbstractRandom random = this.world.random;
 
         // Explosions work by casting many rays through the world from the origin of the explosion
         for (int rayX = 0; rayX < 16; ++rayX) {
@@ -168,7 +169,7 @@ public abstract class ExplosionMixin {
         return added;
     }
 
-    private void performRayCast(Random random, double vecX, double vecY, double vecZ, LongOpenHashSet touched) {
+    private void performRayCast(AbstractRandom random, double vecX, double vecY, double vecZ, LongOpenHashSet touched) {
         double dist = Math.sqrt((vecX * vecX) + (vecY * vecY) + (vecZ * vecZ));
 
         double normX = (vecX / dist) * 0.3D;

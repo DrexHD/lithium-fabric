@@ -17,6 +17,7 @@ import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.chunk.ChunkSection;
+import net.minecraft.world.gen.random.AbstractRandom;
 import net.minecraft.world.poi.PointOfInterest;
 import net.minecraft.world.poi.PointOfInterestSet;
 import net.minecraft.world.poi.PointOfInterestStorage;
@@ -92,7 +93,7 @@ public abstract class PointOfInterestStorageMixin extends SerializingRegionBased
     @Overwrite
     public Optional<BlockPos> getPosition(Predicate<PointOfInterestType> typePredicate, Predicate<BlockPos> posPredicate,
                                           PointOfInterestStorage.OccupationStatus status, BlockPos pos, int radius,
-                                          Random rand) {
+                                          AbstractRandom rand) {
         ArrayList<PointOfInterest> list = this.withinSphereChunkSectionSorted(typePredicate, pos, radius, status);
 
         for (int i = list.size() - 1; i >= 0; i--) {

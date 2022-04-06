@@ -1,6 +1,7 @@
 package me.jellysquid.mods.lithium.mixin.math.fast_util;
 
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.gen.random.AbstractRandom;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -32,7 +33,7 @@ public class DirectionMixin {
      * @author JellySquid
      */
     @Overwrite
-    public static Direction random(Random rand) {
+    public static Direction random(AbstractRandom rand) {
         return ALL[rand.nextInt(ALL.length)];
     }
 }

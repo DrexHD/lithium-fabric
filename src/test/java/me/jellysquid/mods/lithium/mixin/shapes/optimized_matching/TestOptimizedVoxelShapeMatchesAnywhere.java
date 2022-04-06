@@ -8,6 +8,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.gen.random.AbstractRandom;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Arrays;
@@ -53,7 +54,7 @@ public class TestOptimizedVoxelShapeMatchesAnywhere {
         matchedAnywhere = 0;
         notMatchedAnywhere = 0;
         notRunModCode = 0;
-        Random random = new Random();
+        AbstractRandom random = AbstractRandom.method_43053();
         VoxelShapeVoxelShapePair pair = null;
 
         try {
@@ -137,7 +138,7 @@ public class TestOptimizedVoxelShapeMatchesAnywhere {
     }
 
 
-    public static VoxelShapeVoxelShapePair getRandomTest(Random random) {
+    public static VoxelShapeVoxelShapePair getRandomTest(AbstractRandom random) {
         double x = random.nextInt(1000) - 500 + random.nextDouble();
         double y = random.nextInt(1000) - 500 + random.nextDouble();
         double z = random.nextInt(1000) - 500 + random.nextDouble();
@@ -179,7 +180,7 @@ public class TestOptimizedVoxelShapeMatchesAnywhere {
     }
 
 
-    private static VoxelShapeVoxelShapePair getRandomTestWithComplexShape(Random random) {
+    private static VoxelShapeVoxelShapePair getRandomTestWithComplexShape(AbstractRandom random) {
         VoxelShape complexShape = Util.getRandom(TESTED_COMPLEX_SHAPES, random);
         if (random.nextInt(8) > 1) {
             complexShape = complexShape.offset(
@@ -221,7 +222,7 @@ public class TestOptimizedVoxelShapeMatchesAnywhere {
         return new VoxelShapeVoxelShapePair(cuboid(b), complexShape, function);
     }
 
-    private static double getFuzzy(double val, Random random, double specialValue, float chanceFuzz, float chanceBigFuzz, float chanceSpecialOffset) {
+    private static double getFuzzy(double val, AbstractRandom random, double specialValue, float chanceFuzz, float chanceBigFuzz, float chanceSpecialOffset) {
         if (random.nextFloat() < chanceFuzz) {
             if (random.nextInt(8) > 1) {
                 val += 3e-7 * random.nextDouble() * (random.nextInt(2) * 2 - 1);

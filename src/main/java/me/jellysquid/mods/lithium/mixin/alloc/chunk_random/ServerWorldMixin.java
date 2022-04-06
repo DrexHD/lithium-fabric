@@ -6,6 +6,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.random.AbstractRandom;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -39,10 +40,10 @@ public abstract class ServerWorldMixin {
             method = "tickChunk(Lnet/minecraft/world/chunk/WorldChunk;I)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/block/BlockState;randomTick(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)V"
+                    target = "Lnet/minecraft/block/BlockState;randomTick(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/gen/random/AbstractRandom;)V"
             )
     )
-    private void redirectBlockStateTick(BlockState blockState, ServerWorld world, BlockPos pos, Random rand) {
+    private void redirectBlockStateTick(BlockState blockState, ServerWorld world, BlockPos pos, AbstractRandom rand) {
         blockState.randomTick(world, pos.toImmutable(), rand);
     }
 
@@ -53,10 +54,10 @@ public abstract class ServerWorldMixin {
             method = "tickChunk(Lnet/minecraft/world/chunk/WorldChunk;I)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/fluid/FluidState;onRandomTick(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)V"
+                    target = "Lnet/minecraft/fluid/FluidState;onRandomTick(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/gen/random/AbstractRandom;)V"
             )
     )
-    private void redirectFluidStateTick(FluidState fluidState, World world, BlockPos pos, Random rand) {
+    private void redirectFluidStateTick(FluidState fluidState, World world, BlockPos pos, AbstractRandom rand) {
         fluidState.onRandomTick(world, pos.toImmutable(), rand);
     }
 }
