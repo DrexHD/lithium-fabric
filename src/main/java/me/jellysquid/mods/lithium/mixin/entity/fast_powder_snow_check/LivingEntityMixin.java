@@ -28,7 +28,7 @@ public abstract class LivingEntityMixin extends Entity {
             method = "addPowderSnowSlowIfNeeded()V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/entity/LivingEntity;getLandingBlockState()Lnet/minecraft/block/BlockState;"
+                    target = "Lnet/minecraft/entity/LivingEntity;method_43261()Lnet/minecraft/block/BlockState;"
             )
     )
     private BlockState delayGetBlockState(LivingEntity instance) {
@@ -54,6 +54,6 @@ public abstract class LivingEntityMixin extends Entity {
             )
     )
     private EntityAttributeInstance doDelayedBlockStateAirTest(LivingEntity instance, EntityAttribute attribute) {
-        return this.getLandingBlockState().isAir() ? null : this.getAttributeInstance(attribute);
+        return this.method_43261().isAir() ? null : this.getAttributeInstance(attribute);
     }
 }
