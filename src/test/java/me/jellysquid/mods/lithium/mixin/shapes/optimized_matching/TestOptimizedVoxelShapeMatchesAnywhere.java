@@ -8,7 +8,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.gen.random.AbstractRandom;
+import net.minecraft.util.math.random.AbstractRandom;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Arrays;
@@ -54,7 +54,7 @@ public class TestOptimizedVoxelShapeMatchesAnywhere {
         matchedAnywhere = 0;
         notMatchedAnywhere = 0;
         notRunModCode = 0;
-        AbstractRandom random = AbstractRandom.method_43053();
+        AbstractRandom random = AbstractRandom.create();
         VoxelShapeVoxelShapePair pair = null;
 
         try {

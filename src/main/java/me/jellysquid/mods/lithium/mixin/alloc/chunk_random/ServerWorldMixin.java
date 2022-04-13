@@ -5,13 +5,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.AbstractRandom;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.random.AbstractRandom;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-
-import java.util.Random;
 
 @Mixin(ServerWorld.class)
 public abstract class ServerWorldMixin {
@@ -40,7 +38,7 @@ public abstract class ServerWorldMixin {
             method = "tickChunk(Lnet/minecraft/world/chunk/WorldChunk;I)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/block/BlockState;randomTick(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/gen/random/AbstractRandom;)V"
+                    target = "Lnet/minecraft/block/BlockState;randomTick(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/random/AbstractRandom;)V"
             )
     )
     private void redirectBlockStateTick(BlockState blockState, ServerWorld world, BlockPos pos, AbstractRandom rand) {
@@ -54,7 +52,7 @@ public abstract class ServerWorldMixin {
             method = "tickChunk(Lnet/minecraft/world/chunk/WorldChunk;I)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/fluid/FluidState;onRandomTick(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/world/gen/random/AbstractRandom;)V"
+                    target = "Lnet/minecraft/fluid/FluidState;onRandomTick(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/random/AbstractRandom;)V"
             )
     )
     private void redirectFluidStateTick(FluidState fluidState, World world, BlockPos pos, AbstractRandom rand) {
