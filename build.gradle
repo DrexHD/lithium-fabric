@@ -107,6 +107,7 @@ tasks.withType(Jar) {
     from sourceSets.api.output
 }
 
+/*
 task apiJar(type: Jar) {
     classifier "api-dev"
 
@@ -119,6 +120,7 @@ task remapApiJar(type: RemapJarTask, dependsOn: apiJar) {
     input = apiJar.archiveFile.get().asFile
     addNestedDependencies = false
 }
+*/
 
 publishing {
     publications {
@@ -127,11 +129,13 @@ publishing {
             artifact(remapJar)
         }
 
+        /*
         api (MavenPublication) {
             artifactId "lithium-api"
             artifact(remapApiJar)
         }
+        */
     }
 }
 
-build.dependsOn remapApiJar
+// build.dependsOn remapApiJar
