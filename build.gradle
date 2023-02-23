@@ -56,7 +56,7 @@ repositories {
 }
 
 loom {
-    runs {
+    /*runs {
         testmodServer {
             runDir("testserver");
             server()
@@ -68,7 +68,7 @@ loom {
             inherit testmodServer
             vmArg "-Dfabric.autoTest"
         }
-    }
+    }*/
 }
 
 
