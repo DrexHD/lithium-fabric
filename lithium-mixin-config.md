@@ -110,6 +110,22 @@ Entity trackers use a fastutil set for storing players instead of an IdentityHas
 (default: `true`)  
 Avoid `Enum#values()` array copy in frequently called code  
   
+### `mixin.alloc.enum_values.living_entity`
+(default: `true`)  
+Avoid `Enum#values()` array copy in frequently called code  
+  
+### `mixin.alloc.enum_values.piston_block`
+(default: `true`)  
+Avoid `Enum#values()` array copy in frequently called code  
+  
+### `mixin.alloc.enum_values.piston_handler`
+(default: `true`)  
+Avoid `Enum#values()` array copy in frequently called code  
+  
+### `mixin.alloc.enum_values.redstone_wire`
+(default: `true`)  
+Avoid `Enum#values()` array copy in frequently called code  
+  
 ### `mixin.alloc.explosion_behavior`
 (default: `true`)  
 Remove lambda allocation in frequently called block blast resistance calculation in explosion code  
@@ -124,7 +140,7 @@ Optimizations related to blocks
   
 ### `mixin.block.flatten_states`
 (default: `true`)  
-BlockStates store their FluidState directly and whether they are empty  
+FluidStates store directly whether they are empty  
   
 ### `mixin.block.hopper`
 (default: `true`)  
@@ -133,6 +149,12 @@ Requirements:
 - `mixin.util.entity_movement_tracking=true`
 - `mixin.util.block_entity_retrieval=true`
 - `mixin.util.inventory_change_listening=true`  
+  
+### `mixin.block.hopper.worldedit_compat`
+(default: `false`)  
+Send updates to hoppers when adding inventory block entities to chunks when world edit is loaded. Fixes the issue of hoppers not noticing when inventories are placed using worldedit without any block updates.  
+Requirements:
+- `mixin.util.block_entity_retrieval=true`  
   
 ### `mixin.block.moving_block_shapes`
 (default: `true`)  
@@ -197,6 +219,10 @@ The expensive check to see if a TypeFilterableList can be filtered by a specific
 ### `mixin.collections.entity_ticking`
 (default: `true`)  
 Copy entity hashmap instead of duplicating the list using iteration  
+  
+### `mixin.collections.fluid_submersion`
+(default: `true`)  
+Use ReferenceArraySet instead of HashSet to store the fluids the entity is currently submerged in.  
   
 ### `mixin.collections.gamerules`
 (default: `true`)  
