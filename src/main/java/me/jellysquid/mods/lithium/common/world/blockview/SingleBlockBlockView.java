@@ -40,6 +40,12 @@ public record SingleBlockBlockView(BlockState state, BlockPos blockPos) implemen
         }
     }
 
+    @Override
+    // isPotato
+    public boolean method_58798() {
+        return false;
+    }
+
     @Nullable
     @Override
     public BlockEntity getBlockEntity(BlockPos pos) {
@@ -89,11 +95,6 @@ public record SingleBlockBlockView(BlockState state, BlockPos blockPos) implemen
 
     @Override
     public boolean isSpaceEmpty(Entity entity) {
-        throw SingleBlockViewException.INSTANCE;
-    }
-
-    @Override
-    public boolean isSpaceEmpty(@Nullable Entity entity, Box box) {
         throw SingleBlockViewException.INSTANCE;
     }
 

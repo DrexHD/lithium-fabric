@@ -257,19 +257,6 @@ Requirements:
 - `mixin.util.block_tracking=true`
 - `mixin.experimental.entity.block_caching.fluid_pushing=false`  
   
-### `mixin.entity.collisions.intersection`
-(default: `true`)  
-Uses faster block access for block collisions and delayed entity access with grouped boat/shulker for entity collisions when available  
-Requirements:
-- `mixin.util.block_tracking=true`
-- `mixin.util.chunk_access=true`  
-  
-### `mixin.entity.collisions.movement`
-(default: `true`)  
-Entity movement uses optimized block access and optimized and delayed entity access  
-Requirements:
-- `mixin.util.chunk_access=true`  
-  
 ### `mixin.entity.collisions.unpushable_cramming`
 (default: `true`)  
 In chunks with many mobs in ladders a separate list of pushable entities for cramming tests is used  

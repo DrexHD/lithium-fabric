@@ -12,6 +12,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockLocating;
 import net.minecraft.world.PortalForcer;
 import net.minecraft.world.border.WorldBorder;
+import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.poi.PointOfInterest;
 import net.minecraft.world.poi.PointOfInterestStorage;
 import org.spongepowered.asm.mixin.Final;
@@ -37,7 +38,7 @@ public class PortalForcerMixin {
         int searchRadius = dstIsNether ? 16 : 128;
 
         PointOfInterestStorage poiStorage = this.world.getPointOfInterestStorage();
-        poiStorage.preloadChunks(this.world, centerPos, searchRadius);
+        poiStorage.preloadChunks(this.world, centerPos, searchRadius, ChunkStatus.EMPTY);
 
         Optional<PointOfInterest> ret = ((PointOfInterestStorageExtended) poiStorage).findNearestForPortalLogic(centerPos, searchRadius,
                 POIRegistryEntries.NETHER_PORTAL_ENTRY, PointOfInterestStorage.OccupationStatus.ANY,

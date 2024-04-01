@@ -43,7 +43,7 @@ public abstract class PointOfInterestStorageMixin extends SerializingRegionBased
      * of single chunks only.
      */
     @Overwrite
-    public void preloadChunks(WorldView worldView, BlockPos pos, int radius) {
+    public void preloadChunks(WorldView worldView, BlockPos pos, int radius, ChunkStatus status) {
         if (this.preloadRadius != radius) {
             //Usually there is only one preload radius per PointOfInterestStorage. Just in case another mod adjusts it dynamically, we avoid
             //assuming its value.
