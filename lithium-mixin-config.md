@@ -254,7 +254,7 @@ Requirements:
   
 ### `mixin.entity.collisions.movement`
 (default: `true`)  
-Entity movement uses optimized block access and optimized and delayed entity access  
+Entity movement uses optimized block/entity access  
 Requirements:
 - `mixin.util.chunk_access=true`  
   
