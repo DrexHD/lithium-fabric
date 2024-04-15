@@ -35,8 +35,7 @@ public class EntityMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/entity/Entity;adjustMovementForCollisions(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Lnet/minecraft/world/World;Ljava/util/List;)Lnet/minecraft/util/math/Vec3d;"
-            ),
-            require = 5
+            )
     )
     private Vec3d adjustMovementForCollisionsGetEntitiesLater(@Nullable Entity entity, Vec3d movement, Box entityBoundingBox, World world, List<VoxelShape> collisions) {
         return lithiumCollideMultiAxisMovement(entity, movement, entityBoundingBox, world, true, collisions);
