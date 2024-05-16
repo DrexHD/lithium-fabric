@@ -44,10 +44,6 @@ public abstract class ServerChunkManagerMixin {
     private ChunkTicketManager ticketManager;
 
     @Shadow
-    @Final
-    public ThreadedAnvilChunkStorage threadedAnvilChunkStorage;
-
-    @Shadow
     protected abstract ChunkHolder getChunkHolder(long pos);
 
     @Shadow
@@ -63,6 +59,9 @@ public abstract class ServerChunkManagerMixin {
     @Shadow
     abstract boolean updateChunks();
 
+    @Shadow
+    @Final
+    public ServerChunkLoadingManager chunkLoadingManager;
     private long time;
 
     @Inject(method = "tick", at = @At("HEAD"))
@@ -181,10 +180,10 @@ public abstract class ServerChunkManagerMixin {
         if (loadFuture == null) {
             if (ChunkLevels.getStatus(holder.getLevel()).isAtLeast(status)) {
                 // Create a new future which upgrades the chunk from the previous status level to the desired one
-                CompletableFuture<OptionalChunk<Chunk>> mergedFuture = this.threadedAnvilChunkStorage.getChunk(holder, status);
+                CompletableFuture<OptionalChunk<Chunk>> mergedFuture = holder.load(status, this.chunkLoadingManager);
 
                 // Add this future to the chunk holder so subsequent calls will see it
-                holder.combineSavingFuture(mergedFuture, "schedule chunk status");
+                ((ChunkHolderAccessor) holder).callCombineSavingFuture(mergedFuture);
                 ((ChunkHolderExtended) holder).lithium$setFutureForStatus(status.getIndex(), mergedFuture);
 
                 loadFuture = mergedFuture;

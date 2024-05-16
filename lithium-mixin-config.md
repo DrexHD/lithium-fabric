@@ -188,7 +188,7 @@ Various collection optimizations
   
 ### `mixin.collections.attributes`
 (default: `true`)  
-Uses fastutil hashmaps for entity attributes  
+Initialize attribute collections with small default size  
   
 ### `mixin.collections.block_entity_tickers`
 (default: `true`)  
@@ -360,10 +360,6 @@ Various world generation optimizations
 ### `mixin.gen.cached_generator_settings`
 (default: `false`)  
 World generator settings cache the sea level. Disabled by default due to startup crash.  
-  
-### `mixin.gen.chunk_region`
-(default: `true`)  
-An optimized chunk cache is used for world population features which avoids array indirection and complex logic  
   
 ### `mixin.math`
 (default: `true`)  

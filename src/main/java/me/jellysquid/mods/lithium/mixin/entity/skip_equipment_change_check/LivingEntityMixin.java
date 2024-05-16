@@ -1,6 +1,7 @@
 package me.jellysquid.mods.lithium.mixin.entity.skip_equipment_change_check;
 
 import me.jellysquid.mods.lithium.common.entity.EquipmentEntity;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -71,10 +72,10 @@ public abstract class LivingEntityMixin extends Entity implements EquipmentEntit
     }
 
     @Inject(
-            method = "eatFood(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;",
+            method = "eatFood",
             at = @At("RETURN")
     )
-    private void trackEatingEquipmentChange(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
+    private void trackEatingEquipmentChange(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) {
         this.lithium$OnEquipmentChanged();
     }
 }

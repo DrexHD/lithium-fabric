@@ -6,6 +6,7 @@ import net.minecraft.entity.attribute.AttributeContainer;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
+import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -22,12 +23,17 @@ public class AttributeContainerMixin {
     @Mutable
     @Shadow
     @Final
-    private Map<EntityAttribute, EntityAttributeInstance> custom;
+    private Map<RegistryEntry<EntityAttribute>, EntityAttributeInstance> custom;
 
     @Mutable
     @Shadow
     @Final
-    private Set<EntityAttributeInstance> tracked;
+    private Set<EntityAttributeInstance> field_51889;
+
+    @Mutable
+    @Shadow
+    @Final
+    private Set<EntityAttributeInstance> field_51890;
 
     @Inject(
             method = "<init>",
@@ -35,6 +41,7 @@ public class AttributeContainerMixin {
     )
     private void initCollections(DefaultAttributeContainer defaultAttributes, CallbackInfo ci) {
         this.custom = new Reference2ReferenceOpenHashMap<>(0);
-        this.tracked = new ReferenceOpenHashSet<>(0);
+        this.field_51889 = new ReferenceOpenHashSet<>(0);
+        this.field_51890 = new ReferenceOpenHashSet<>(0);
     }
 }
