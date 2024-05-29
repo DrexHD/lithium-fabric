@@ -8,6 +8,7 @@ import me.jellysquid.mods.lithium.common.world.interests.RegionBasedStorageSecti
 import me.jellysquid.mods.lithium.common.world.interests.iterator.NearbyPointOfInterestStream;
 import me.jellysquid.mods.lithium.common.world.interests.iterator.SinglePointOfInterestTypeFilter;
 import me.jellysquid.mods.lithium.common.world.interests.iterator.SphereChunkOrderedPoiSetSpliterator;
+import net.minecraft.class_9820;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.annotation.Debug;
@@ -42,9 +43,8 @@ import java.util.stream.StreamSupport;
 public abstract class PointOfInterestStorageMixin extends SerializingRegionBasedStorage<PointOfInterestSet>
         implements PointOfInterestStorageExtended {
 
-
-    public PointOfInterestStorageMixin(ChunkPosKeyedStorage storageAccess, Function<Runnable, Codec<PointOfInterestSet>> codecFactory, Function<Runnable, PointOfInterestSet> factory, DynamicRegistryManager registryManager, HeightLimitView world) {
-        super(storageAccess, codecFactory, factory, registryManager, world);
+    public PointOfInterestStorageMixin(ChunkPosKeyedStorage storageAccess, Function<Runnable, Codec<PointOfInterestSet>> codecFactory, Function<Runnable, PointOfInterestSet> factory, DynamicRegistryManager registryManager, class_9820 arg, HeightLimitView heightLimitView) {
+        super(storageAccess, codecFactory, factory, registryManager, arg, heightLimitView);
     }
 
     /**
