@@ -254,6 +254,10 @@ Uses custom hashset/list combination for faster mob spawn checks
 (default: `true`)  
 Various entity optimizations  
   
+### `mixin.entity.cache_max_track_distance`
+(default: `true`)  
+Caches the max tracking distance of entities with their passengers  
+  
 ### `mixin.entity.collisions`
 (default: `true`)  
 Various entity collision optimizations  
