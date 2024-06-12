@@ -19,7 +19,7 @@ public abstract class ServerChunkLoadingManager$EntityTrackerMixin {
     public Entity entity;
 
     @Unique
-    private int cachedMaxTrackingDistance;
+    private int cachedMaxTrackingDistance = -1;
 
     @WrapOperation(method = "updateTrackedStatus(Lnet/minecraft/server/network/ServerPlayerEntity;)V",
             at = @At(
@@ -28,7 +28,7 @@ public abstract class ServerChunkLoadingManager$EntityTrackerMixin {
             )
     )
     private int cacheMaxTrackDistance(ServerChunkLoadingManager.EntityTracker instance, Operation<Integer> original) {
-        if (((PassengerCachingEntity) this.entity).lithium$isPassengerListDirty()) {
+        if (((PassengerCachingEntity) this.entity).lithium$isPassengerListDirty() || cachedMaxTrackingDistance == -1) {
             this.cachedMaxTrackingDistance = original.call(instance);
             ((PassengerCachingEntity) this.entity).lithium$setPassengerListDirty(false);
         }
