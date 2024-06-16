@@ -44,6 +44,8 @@ Mob Tasks which search for POIs use the optimized POI search
 ### `mixin.ai.raid`
 (default: `true`)  
 Avoids unnecessary raid bar updates and optimizes expensive leader banner operations  
+Requirements:
+- `mixin.util.data_storage=true`  
   
 ### `mixin.ai.sensor.secondary_poi`
 (default: `true`)  
@@ -320,6 +322,8 @@ Access entities faster when accessing a relatively small number of entity sectio
 ### `mixin.entity.inactive_navigations`
 (default: `true`)  
 Block updates skip notifying mobs that won't react to the block update anyways  
+Requirements:
+- `mixin.util.data_storage=true`  
   
 ### `mixin.entity.replace_entitytype_predicates`
 (default: `true`)  
@@ -341,19 +345,19 @@ Experimental entity optimizations
 (default: `true`)  
 Use block listening system to allow skipping stuff in entity code  
 Requirements:
-- `mixin.util.block_tracking.block_listening=true`  
+- `mixin.util.block_tracking=true`  
   
 ### `mixin.experimental.entity.block_caching.block_support`
 (default: `true`)  
 Use the block listening system to skip supporting block search (used for honey block pushing, velocity modifiers like soulsand, etc)  
 Requirements:
-- `mixin.util.block_tracking.block_listening=true`  
+- `mixin.util.block_tracking=true`  
   
 ### `mixin.experimental.entity.block_caching.block_touching`
 (default: `true`)  
 Use the block listening system to skip block touching (like cactus touching).  
 Requirements:
-- `mixin.util.block_tracking.block_listening=true`  
+- `mixin.util.block_tracking=true`  
   
 ### `mixin.experimental.entity.block_caching.fire_lava_touching`
 (default: `true`)  
@@ -363,16 +367,16 @@ Skip searching for fire or lava in the burn time countdown logic when they are n
 (default: `true`)  
 Use the block listening system to cache entity fluid interaction when not touching fluid currents.  
 Requirements:
-- `mixin.util.block_tracking.block_listening=true`  
+- `mixin.util.block_tracking=true`  
   
 ### `mixin.experimental.entity.block_caching.suffocation`
 (default: `true`)  
 Use the block listening system to cache the entity suffocation check.  
 Requirements:
-- `mixin.util.block_tracking.block_listening=true`  
+- `mixin.util.block_tracking=true`  
   
 ### `mixin.experimental.entity.item_entity_merging`
-(default: `true`)  
+(default: `false`)  
 Optimize item entity merging by categorizing item entities by item type and only attempting to merge with the same type. Categorizing by stack size allows skipping merge attempts of full item entities or two more than half full item entities.  
 Requirements:
 - `mixin.util.accessors=true`
@@ -416,7 +420,7 @@ Optimizations that technically deviate from vanilla behavior, but must not affec
 Speed up finding empty spaces mobs fit into. This speeds up entity pose checks and nether portal positioning for colliding mobs (This code is vanilla's nether portal horse suffocation fix). If certain block collision surfaces have coordinates that are different but within 1e-7 of each other, this optimization may cause entities coming from nether portals or changing pose to be placed in a different position or pose than vanilla. This effect only occurs when the decision whether the entity fits into a space depends on a difference in the magnitude of 1e-7 blocks.  
   
 ### `mixin.minimal_nonvanilla.world.block_entity_ticking.support_cache`
-(default: `true`)  
+(default: `false`)  
 BlockEntity ticking caches whether the BlockEntity can exist in the BlockState at the same location. This deviates from vanilla in the case of placing a hopper in a powered location, immediately updating the cached BlockState (which is incorrect in vanilla). This most likely does not affect your gameplay, as this deviation only affects hoppers, and in vanilla, hoppers never use the cached state information anyway.  
 Requirements:
 - `mixin.world.block_entity_ticking=true`  
@@ -471,15 +475,21 @@ Allows access to existing BlockEntities without creating new ones
   
 ### `mixin.util.block_tracking`
 (default: `true`)  
-Chunk sections count certain blocks inside them and provide a method to quickly check whether a chunk contains any of these blocks  
-  
-### `mixin.util.block_tracking.block_listening`
-(default: `true`)  
-Chunk sections can notify registered listeners about certain blocks being placed or broken  
+Chunk sections count certain blocks inside them and provide a method to quickly check whether a chunk contains any of these blocks. Furthermore, chunk sections can notify registered listeners about certain blocks being placed or broken.  
+Requirements:
+- `mixin.util.data_storage=true`  
   
 ### `mixin.util.chunk_access`
 (default: `true`)  
 Access chunks of worlds, chunk caches and chunk regions directly.  
+  
+### `mixin.util.chunk_status_tracking`
+(default: `true`)  
+Allows reacting to changes of the load status of chunks.  
+  
+### `mixin.util.data_storage`
+(default: `true`)  
+Stores lithium's extra data used for various optimizations on a per-world basis. The data is not saved, but allows optimizations to quickly store and access data.  
   
 ### `mixin.util.entity_collection_replacement`
 (default: `true`)  
@@ -489,7 +499,8 @@ Allow replacing entity collections with custom collection types.
 (default: `true`)  
 System to notify subscribers of certain entity sections about position changes of certain entity types.  
 Requirements:
-- `mixin.util.entity_section_position=true`  
+- `mixin.util.entity_section_position=true`
+- `mixin.util.data_storage=true`  
   
 ### `mixin.util.entity_section_position`
 (default: `true`)  
@@ -584,16 +595,19 @@ Various improvements to explosions.
 Various improvements to explosion block damage, e.g. not accessing blocks along an explosion ray multiple times  
   
 ### `mixin.world.explosions.cache_exposure`
-(default: `true`)  
+(default: `false`)  
 Caches entity explosion exposure to avoid duplicate calculations.  
   
 ### `mixin.world.game_events`
 (default: `true`)  
-Various improvements to game events (vibrations).  
+Various improvements to game events (vibrations) that are detected by allays, wardens and several sculk blocks.  
   
-### `mixin.world.game_events.dispatch_to_empty`
+### `mixin.world.game_events.dispatch`
 (default: `true`)  
-Create game event dispatchers for chunk sections only when needed, i.e. when a listener is added to a section. This reduces memory usage for chunks that do not have any listeners. This speeds up attempting to dispatch events when there are no nearby listeners, which could be sculk sensors, allays, wardens or sculk shriekers.  
+Create game event dispatchers for chunk sections only when needed, i.e. when a listener is added to a section. This reduces memory usage for chunks that do not have any listeners. The dispatchers are accessed more directly instead of indirectly through chunks. In total this speeds up attempting to dispatch events especially when there are no nearby listeners.  
+Requirements:
+- `mixin.util.data_storage=true`
+- `mixin.util.chunk_status_tracking=true`  
   
 ### `mixin.world.inline_block_access`
 (default: `true`)  
