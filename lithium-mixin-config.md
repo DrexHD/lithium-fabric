@@ -299,6 +299,10 @@ Use equipment tracking to skip ticking enchantments (Soul speed) when no such en
 (default: `true`)  
 Skips repeated checks whether the equipment of an entity changed.  
   
+### `mixin.entity.fast_alive_check`
+(default: `true`)  
+Skip accessing data tracker for entity alive checks  
+  
 ### `mixin.entity.fast_elytra_check`
 (default: `true`)  
 Skip repeatedly writing to the data tracker that an entity is not flying  

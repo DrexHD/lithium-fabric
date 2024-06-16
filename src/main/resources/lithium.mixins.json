@@ -101,6 +101,7 @@
     "collections.goals.GoalSelectorMixin",
     "collections.mob_spawning.PoolMixin",
     "collections.mob_spawning.SpawnSettingsMixin",
+    "entity.fast_alive_check.LivingEntityMixin",
     "entity.collisions.fluid.EntityMixin",
     "entity.collisions.intersection.EntityViewMixin",
     "entity.collisions.intersection.WorldMixin",
