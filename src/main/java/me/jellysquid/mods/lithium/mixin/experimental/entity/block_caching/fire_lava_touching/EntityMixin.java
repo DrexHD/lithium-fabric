@@ -70,7 +70,7 @@ public abstract class EntityMixin implements BlockCacheProvider {
         int minZ = MathHelper.floor(box.minZ);
         int maxZ = MathHelper.floor(box.maxZ);
 
-        if (maxY >= world.getBottomY() && minY < world.getTopY()) {
+        if (maxY >= world.getBottomY() && minY < world.getTopYInclusive()) {
             if (world.isRegionLoaded(minX, minZ, maxX, maxZ)) {
                 BlockPos.Mutable blockPos = new BlockPos.Mutable();
                 for (int y = minY; y <= maxY; y++) {

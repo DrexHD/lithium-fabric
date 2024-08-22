@@ -16,8 +16,8 @@ public abstract class WorldChunkMixin implements HeightLimitView {
     World world;
 
     @Override
-    public int getTopY() {
-        return this.world.getTopY();
+    public int getTopYInclusive() {
+        return this.world.getTopYInclusive();
     }
 
     @Override

@@ -87,7 +87,7 @@ public abstract class WorldMixin implements HeightLimitView {
     }
 
     @Override
-    public int getTopY() {
+    public int getTopYInclusive() {
         return this.topYInclusive + 1;
     }
 }

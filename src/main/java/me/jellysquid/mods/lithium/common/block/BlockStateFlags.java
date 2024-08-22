@@ -1,6 +1,7 @@
 package me.jellysquid.mods.lithium.common.block;
 
 import it.unimi.dsi.fastutil.objects.Reference2BooleanArrayMap;
+import it.unimi.dsi.fastutil.objects.Reference2BooleanMap.Entry;
 import me.jellysquid.mods.lithium.common.ai.pathing.BlockStatePathingCache;
 import me.jellysquid.mods.lithium.common.ai.pathing.PathNodeCache;
 import me.jellysquid.mods.lithium.common.entity.FluidCachingEntity;

@@ -37,10 +37,10 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Mixin(PointOfInterestStorage.class)
-public abstract class PointOfInterestStorageMixin extends SerializingRegionBasedStorage<PointOfInterestSet, PointOfInterestSet.class_9865>
+public abstract class PointOfInterestStorageMixin extends SerializingRegionBasedStorage<PointOfInterestSet, PointOfInterestSet.Serialized>
         implements PointOfInterestStorageExtended {
 
-    public PointOfInterestStorageMixin(ChunkPosKeyedStorage chunkPosKeyedStorage, Codec<PointOfInterestSet.class_9865> codec, Function<PointOfInterestSet, PointOfInterestSet.class_9865> factory, BiFunction<PointOfInterestSet.class_9865, Runnable, PointOfInterestSet> biFunction, Function<Runnable, PointOfInterestSet> function, DynamicRegistryManager dynamicRegistryManager, ChunkErrorHandler chunkErrorHandler, HeightLimitView heightLimitView) {
+    public PointOfInterestStorageMixin(ChunkPosKeyedStorage chunkPosKeyedStorage, Codec<PointOfInterestSet.Serialized> codec, Function<PointOfInterestSet, PointOfInterestSet.Serialized> factory, BiFunction<PointOfInterestSet.Serialized, Runnable, PointOfInterestSet> biFunction, Function<Runnable, PointOfInterestSet> function, DynamicRegistryManager dynamicRegistryManager, ChunkErrorHandler chunkErrorHandler, HeightLimitView heightLimitView) {
         super(chunkPosKeyedStorage, codec, factory, biFunction, function, dynamicRegistryManager, chunkErrorHandler, heightLimitView);
     }
 

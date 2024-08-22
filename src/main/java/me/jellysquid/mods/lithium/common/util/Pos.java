@@ -13,10 +13,10 @@ public class Pos {
             return view.getBottomY();
         }
         public static int getMaxYInclusive(HeightLimitView view) {
-            return view.getTopY() - 1;
+            return view.getTopYInclusive() - 1;
         }
         public static int getMaxYExclusive(HeightLimitView view) {
-            return view.getTopY();
+            return view.getTopYInclusive();
         }
 
         public static int getMaxInSectionCoord(int sectionCoord) {

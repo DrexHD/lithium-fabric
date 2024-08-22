@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(RaiderEntity.PickupBannerAsLeaderGoal.class)
+@Mixin(RaiderEntity.PickUpBannerAsLeaderGoal.class)
 public class PickupBannerAsLeaderGoalMixin<T extends RaiderEntity> {
     @Shadow
     @Final
@@ -20,7 +20,7 @@ public class PickupBannerAsLeaderGoalMixin<T extends RaiderEntity> {
 
     // The call to Raid#createOminousBanner() is very expensive, use a cached banner during AI ticking
     @Redirect(
-            method = "method_61559",
+            method = "shouldStop",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/village/raid/Raid;createOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"

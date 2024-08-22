@@ -2,6 +2,8 @@ package me.jellysquid.mods.lithium.mixin.entity.replace_entitytype_predicates;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.entity.vehicle.DefaultMinecartController;
+import net.minecraft.entity.vehicle.ExperimentalMinecartController;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,11 +12,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 
-@Mixin(AbstractMinecartEntity.class)
-public class AbstractMinecartEntityMixin {
+@Mixin(ExperimentalMinecartController.class)
+public class ExperimentalMinecartControllerMixin {
 
     @Redirect(
-            method = "method_61562",
+            method = "pushAwayFromEntities",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/World;getOtherEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Box;)Ljava/util/List;"

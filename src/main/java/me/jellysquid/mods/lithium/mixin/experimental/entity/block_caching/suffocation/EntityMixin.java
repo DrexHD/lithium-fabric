@@ -69,7 +69,7 @@ public abstract class EntityMixin implements BlockCacheProvider {
         World world = this.world;
         //skip getting blocks when the entity is outside the world height
         //also avoids infinite loop with entities below y = Integer.MIN_VALUE (some modded servers do that)
-        if (world.getBottomY() > maxY || world.getTopY() < minY) {
+        if (world.getBottomY() > maxY || world.getTopYInclusive() < minY) {
             bc.setCachedIsSuffocating(false);
             cir.setReturnValue(false);
             return;

@@ -294,7 +294,7 @@ public abstract class FlowableFluidMixin {
     }
 
     @Redirect(
-            method = "method_61814",
+            method = "canFill(Lnet/minecraft/block/BlockState;)Z",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isIn(Lnet/minecraft/registry/tag/TagKey;)Z")
     )
     private static boolean isSign(BlockState blockState, TagKey<Block> tagKey, @Local Block block) {

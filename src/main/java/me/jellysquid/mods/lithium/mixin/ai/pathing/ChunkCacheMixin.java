@@ -63,7 +63,7 @@ public abstract class ChunkCacheMixin implements BlockView {
         }
 
         this.bottomY = this.getBottomY();
-        this.topY = this.getTopY();
+        this.topY = this.getTopYInclusive();
     }
 
     /**
