@@ -29,7 +29,7 @@ public abstract class AbstractMinecartEntityMixin extends Entity {
             method = "moveOnRail",
             at = @At("HEAD")
     )
-    private void avoidNotifyingMovementListeners(BlockPos pos, BlockState state, CallbackInfo ci) {
+    private void avoidNotifyingMovementListeners(CallbackInfo ci) {
         if (this instanceof Inventory) {
             this.beforeMoveOnRailPos = this.getPos();
             EntityChangeListener changeListener = ((EntityAccessor) this).getChangeListener();
@@ -43,7 +43,7 @@ public abstract class AbstractMinecartEntityMixin extends Entity {
             method = "moveOnRail",
             at = @At("RETURN")
     )
-    private void notifyMovementListeners(BlockPos pos, BlockState state, CallbackInfo ci) {
+    private void notifyMovementListeners(CallbackInfo ci) {
         if (this instanceof Inventory) {
             EntityChangeListener changeListener = ((EntityAccessor) this).getChangeListener();
             if (changeListener instanceof ToggleableMovementTracker toggleableMovementTracker) {

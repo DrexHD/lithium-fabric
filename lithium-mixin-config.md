@@ -21,7 +21,7 @@ mixin.gen.biome_noise_cache=false
 Mob AI optimizations  
   
 ### `mixin.ai.pathing`
-(default: `true`)  
+(default: `false`)  
 A faster code path is used for determining what kind of path-finding node type is associated with a
 given block. Additionally, a faster chunk cache will be used for accessing blocks while evaluating
 paths.
@@ -103,10 +103,6 @@ Improve the BlockState withTable lookup by using a custom table implementation.
 (default: `true`)  
 Random block ticking uses fewer block position allocations, thereby reducing the object allocation rate.  
   
-### `mixin.alloc.chunk_ticking`
-(default: `true`)  
-Reuse large chunk lists  
-  
 ### `mixin.alloc.composter`
 (default: `true`)  
 Composters will reuse the available slot arrays that are requested by hoppers  
@@ -183,7 +179,7 @@ Requirements:
 Moving blocks and retracting pistons avoid calculating their VoxelShapes by reusing previously created VoxelShapes.  
   
 ### `mixin.block.redstone_wire`
-(default: `true`)  
+(default: `false`)  
 Redstone wire power calculations avoid duplicate block accesses  
   
 ### `mixin.cached_hashcode`
@@ -494,7 +490,7 @@ Allow accessing certain fields and functions that are normally inaccessible
 Allows access to existing BlockEntities without creating new ones  
   
 ### `mixin.util.block_tracking`
-(default: `true`)  
+(default: `false`)  
 Chunk sections count certain blocks inside them and provide a method to quickly check whether a chunk contains any of these blocks. Furthermore, chunk sections can notify registered listeners about certain blocks being placed or broken.  
 Requirements:
 - `mixin.util.data_storage=true`
@@ -614,10 +610,6 @@ Various improvements to explosions.
 ### `mixin.world.explosions.block_raycast`
 (default: `true`)  
 Various improvements to explosion block damage, e.g. not accessing blocks along an explosion ray multiple times  
-  
-### `mixin.world.explosions.cache_exposure`
-(default: `true`)  
-Caches entity explosion exposure to avoid duplicate calculations.  
   
 ### `mixin.world.game_events`
 (default: `true`)  

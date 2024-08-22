@@ -38,7 +38,6 @@
     "alloc.blockstate.StateMixin",
     "alloc.chunk_random.ServerWorldMixin",
     "alloc.chunk_random.WorldMixin",
-    "alloc.chunk_ticking.ServerChunkManagerMixin",
     "alloc.composter.ComposterMixin$ComposterBlockComposterInventoryMixin",
     "alloc.composter.ComposterMixin$ComposterBlockDummyInventoryMixin",
     "alloc.composter.ComposterMixin$ComposterBlockFullComposterInventoryMixin",
@@ -81,7 +80,6 @@
     "block.hopper.worldedit_compat.WorldChunkMixin",
     "block.moving_block_shapes.PistonBlockEntityMixin",
     "block.moving_block_shapes.VoxelShapeMixin",
-    "block.redstone_wire.RedstoneWireBlockMixin",
     "cached_hashcode.BlockNeighborGroupMixin",
     "chunk.entity_class_groups.TypeFilterableListMixin",
     "chunk.no_locking.ChunkSectionMixin",
@@ -118,7 +116,6 @@
     "entity.equipment_tracking.MobEntityMixin",
     "entity.equipment_tracking.enchantment_ticking.LivingEntityMixin",
     "entity.equipment_tracking.equipment_changes.LivingEntityMixin",
-    "entity.fast_elytra_check.LivingEntityMixin",
     "entity.fast_hand_swing.LivingEntityMixin",
     "entity.fast_powder_snow_check.LivingEntityMixin",
     "entity.fast_retrieval.SectionedEntityCacheMixin",
@@ -227,9 +224,6 @@
     "world.chunk_ticking.spread_ice.BiomeMixin",
     "world.combined_heightmap_update.HeightmapAccessor",
     "world.combined_heightmap_update.WorldChunkMixin",
-    "world.explosions.block_raycast.ExplosionMixin",
-    "world.explosions.cache_exposure.ExplosionBehaviorMixin",
-    "world.explosions.cache_exposure.ExplosionMixin",
     "world.game_events.dispatch.GameEventDispatchManagerMixin",
     "world.game_events.dispatch.WorldChunkMixin",
     "world.inline_block_access.WorldChunkMixin",
@@ -238,8 +232,7 @@
     "world.inline_height.WorldMixin",
     "world.raycast.BlockViewMixin",
     "world.raycast.RaycastContextAccessor",
-    "world.temperature_cache.BiomeMixin",
-    "world.tick_scheduler.ChunkTickSchedulerMixin"
+    "world.temperature_cache.BiomeMixin"
   ],
   "client": [
     "chunk.entity_class_groups.ClientWorldMixin",

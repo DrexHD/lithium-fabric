@@ -8,8 +8,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.block.WireOrientation;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -37,14 +40,19 @@ public abstract class HopperBlockMixin extends BlockWithEntity {
         }
     }
 
-    @Inject(method = "neighborUpdate(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/Block;Lnet/minecraft/util/math/BlockPos;Z)V", at = @At(value = "HEAD"))
-    private void updateBlockEntity(BlockState myBlockState, World world, BlockPos myPos, Block block, BlockPos posFrom, boolean moved, CallbackInfo ci) {
+    @Inject(method = "neighborUpdate", at = @At(value = "HEAD"))
+    private void updateBlockEntity(BlockState myBlockState, World world, BlockPos myPos, Block block, WireOrientation wireOrientation, boolean notify, CallbackInfo ci) {
         //invalidate cache when the block is replaced
         if (!world.isClient()) {
-            this.updateHopper(world, myBlockState, myPos, posFrom);
+            // TODO 24w33a source pos no longer seems to be passed
+            BlockEntity hopper = ((BlockEntityGetter) world).lithium$getLoadedExistingBlockEntity(myPos);
+            if (hopper instanceof UpdateReceiver updateReceiver) {
+                updateReceiver.lithium$invalidateCacheOnNeighborUpdate();
+            }
         }
     }
 
+    @Unique
     private void updateHopper(WorldAccess world, BlockState myBlockState, BlockPos myPos, BlockPos posFrom) {
         Direction facing = myBlockState.get(HopperBlock.FACING);
         boolean above = posFrom.getY() == myPos.getY() + 1;

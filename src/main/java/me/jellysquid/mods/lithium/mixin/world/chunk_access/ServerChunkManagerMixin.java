@@ -143,7 +143,7 @@ public abstract class ServerChunkManagerMixin {
 
                 // Vanilla: If the holder is still not available, we need to fail now... something is wrong.
                 if (this.isMissingForLevel(holder, level)) {
-                    throw Util.throwOrPause(new IllegalStateException("No chunk holder after ticket has been added"));
+                    throw Util.getFatalOrPause(new IllegalStateException("No chunk holder after ticket has been added"));
                 }
             } else {
                 //Vanilla: Use UNLOADED_FUTURE. Lithium: Just return null immediately.

@@ -105,7 +105,7 @@ public class TestOptimizedVoxelShapeMatchesAnywhere {
     private static int matchesAnywhereModded(VoxelShape shape1, VoxelShape shape2, BooleanBiFunction predicate) {
         //code from vanilla
         if (predicate.apply(false, false)) {
-            throw Util.throwOrPause(new IllegalArgumentException());
+            throw Util.getFatalOrPause(new IllegalArgumentException());
         } else if (shape1 == shape2) {
             return -1;
         } else if (shape1.isEmpty()) {

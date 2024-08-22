@@ -32,20 +32,16 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.function.*;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Mixin(PointOfInterestStorage.class)
-public abstract class PointOfInterestStorageMixin extends SerializingRegionBasedStorage<PointOfInterestSet>
+public abstract class PointOfInterestStorageMixin extends SerializingRegionBasedStorage<PointOfInterestSet, PointOfInterestSet.class_9865>
         implements PointOfInterestStorageExtended {
 
-
-    public PointOfInterestStorageMixin(ChunkPosKeyedStorage storageAccess, Function<Runnable, Codec<PointOfInterestSet>> codecFactory, Function<Runnable, PointOfInterestSet> factory, DynamicRegistryManager registryManager, ChunkErrorHandler errorHandler, HeightLimitView world) {
-        super(storageAccess, codecFactory, factory, registryManager, errorHandler, world);
+    public PointOfInterestStorageMixin(ChunkPosKeyedStorage chunkPosKeyedStorage, Codec<PointOfInterestSet.class_9865> codec, Function<PointOfInterestSet, PointOfInterestSet.class_9865> factory, BiFunction<PointOfInterestSet.class_9865, Runnable, PointOfInterestSet> biFunction, Function<Runnable, PointOfInterestSet> function, DynamicRegistryManager dynamicRegistryManager, ChunkErrorHandler chunkErrorHandler, HeightLimitView heightLimitView) {
+        super(chunkPosKeyedStorage, codec, factory, biFunction, function, dynamicRegistryManager, chunkErrorHandler, heightLimitView);
     }
 
     /**

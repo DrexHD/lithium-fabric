@@ -18,18 +18,18 @@ public class PickupBannerAsLeaderGoalMixin<T extends RaiderEntity> {
     @Final
     private T actor;
 
-    // The call to Raid#getOminousBanner() is very expensive, use a cached banner during AI ticking
+    // The call to Raid#createOminousBanner() is very expensive, use a cached banner during AI ticking
     @Redirect(
-            method = "canStart()Z",
+            method = "method_61559",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/village/raid/Raid;getOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"
+                    target = "Lnet/minecraft/village/raid/Raid;createOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;"
             )
     )
     private ItemStack getOminousBanner(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
         ItemStack ominousBanner = ((LithiumData) this.actor.getWorld()).lithium$getData().ominousBanner();
         if (ominousBanner == null) {
-            ominousBanner = Raid.getOminousBanner(bannerPatternLookup);
+            ominousBanner = Raid.createOminousBanner(bannerPatternLookup);
         }
         return ominousBanner;
     }

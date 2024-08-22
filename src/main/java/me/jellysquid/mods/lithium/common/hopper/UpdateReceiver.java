@@ -5,5 +5,7 @@ import net.minecraft.util.math.Direction;
 public interface UpdateReceiver {
     void lithium$invalidateCacheOnNeighborUpdate(boolean above);
 
+    void lithium$invalidateCacheOnNeighborUpdate();
+
     void lithium$invalidateCacheOnNeighborUpdate(Direction fromDirection);
 }

@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 public abstract class BiomeMixin {
 
     @Shadow
-    protected abstract float computeTemperature(BlockPos pos);
+    protected abstract float computeTemperature(BlockPos pos, int seaLevel);
 
     /**
      * @author 2No2Name
@@ -18,7 +18,7 @@ public abstract class BiomeMixin {
      */
     @Deprecated
     @Overwrite
-    public float getTemperature(BlockPos blockPos) {
-        return this.computeTemperature(blockPos);
+    public float getTemperature(BlockPos blockPos, int seaLevel) {
+        return this.computeTemperature(blockPos, seaLevel);
     }
 }

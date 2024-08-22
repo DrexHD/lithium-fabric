@@ -18,10 +18,11 @@ import net.minecraft.world.storage.SerializingRegionBasedStorage;
 import org.spongepowered.asm.mixin.*;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @Mixin(PointOfInterestStorage.class)
-public abstract class PointOfInterestStorageMixin extends SerializingRegionBasedStorage<PointOfInterestSet> {
+public abstract class PointOfInterestStorageMixin extends SerializingRegionBasedStorage<PointOfInterestSet, PointOfInterestSet.class_9865> {
 
     @Shadow
     @Final
@@ -32,8 +33,8 @@ public abstract class PointOfInterestStorageMixin extends SerializingRegionBased
     @Unique
     private int preloadRadius = 0;
 
-    public PointOfInterestStorageMixin(ChunkPosKeyedStorage storageAccess, Function<Runnable, Codec<PointOfInterestSet>> codecFactory, Function<Runnable, PointOfInterestSet> factory, DynamicRegistryManager registryManager, ChunkErrorHandler errorHandler, HeightLimitView world) {
-        super(storageAccess, codecFactory, factory, registryManager, errorHandler, world);
+    public PointOfInterestStorageMixin(ChunkPosKeyedStorage chunkPosKeyedStorage, Codec<PointOfInterestSet.class_9865> codec, Function<PointOfInterestSet, PointOfInterestSet.class_9865> factory, BiFunction<PointOfInterestSet.class_9865, Runnable, PointOfInterestSet> biFunction, Function<Runnable, PointOfInterestSet> function, DynamicRegistryManager dynamicRegistryManager, ChunkErrorHandler chunkErrorHandler, HeightLimitView heightLimitView) {
+        super(chunkPosKeyedStorage, codec, factory, biFunction, function, dynamicRegistryManager, chunkErrorHandler, heightLimitView);
     }
 
 

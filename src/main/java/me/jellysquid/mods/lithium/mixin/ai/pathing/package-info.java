@@ -6,7 +6,8 @@
                 """,
         depends = @MixinConfigDependency(
                 dependencyPath = "mixin.util.chunk_access"
-        )
+        ),
+        enabled = false
 )
 package me.jellysquid.mods.lithium.mixin.ai.pathing;
 

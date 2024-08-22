@@ -54,24 +54,23 @@ public abstract class FlowableFluidMixin {
 
 
     @Shadow
-    protected abstract boolean canFill(BlockView world, BlockPos pos, BlockState state, Fluid fluid);
-
-    @Shadow
     public abstract Fluid getStill();
-
-    @Shadow
-    protected abstract boolean isMatchingAndStill(FluidState state);
-
-    @Shadow
-    protected abstract boolean receivesFlow(Direction face, BlockView world, BlockPos pos, BlockState state, BlockPos fromPos, BlockState fromState);
 
     @Shadow
     protected abstract int getMaxFlowDistance(WorldView world);
 
-    @Unique
-    private static int getNumIndicesFromRadius(int radius) {
-        return (radius + 1) * (2 * radius + 1);
+    @Shadow
+    private static boolean canFill(BlockView blockView, BlockPos blockPos, BlockState blockState, Fluid fluid) {
+        return false;
     }
+
+    @Shadow
+    private static boolean receivesFlow(Direction direction, BlockView blockView, BlockPos blockPos, BlockState blockState, BlockPos blockPos2, BlockState blockState2) {
+        return false;
+    }
+
+    @Shadow
+    protected abstract boolean canFlowThrough(BlockView world, Fluid fluid, BlockPos pos, BlockState state, Direction face, BlockPos fromPos, BlockState fromState, FluidState fluidState);
 
     @Unique
     private static byte indexFromDiamondXZOffset(BlockPos originPos, BlockPos offsetPos, int radius) {
@@ -88,7 +87,9 @@ public abstract class FlowableFluidMixin {
      * @author 2No2Name
      * @reason Faster implementation
      */
-    @Inject(method = "getSpread(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Ljava/util/Map;", at = @At("HEAD"), cancellable = true)
+    // TODO Changed in 24w33a
+    // Mojang seems to have changed how they cache fluids
+    /*@Inject(method = "getSpread(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Ljava/util/Map;", at = @At("HEAD"), cancellable = true)
     public void getSpread(World world, BlockPos pos, BlockState state, CallbackInfoReturnable<Map<Direction, FluidState>> cir) {
         // check immediate walls if branching is possible (at most 2 walls)
         // if branching is possible, do the complex flow calculations
@@ -133,24 +134,15 @@ public abstract class FlowableFluidMixin {
             }
         }
         cir.setReturnValue(flowResultByDirection);
-    }
+    }*/
 
     /**
      * @author 2No2Name
      * @reason Rearrange to have cheaper checks first
      */
     @Overwrite
-    private boolean canFlowThrough(BlockView world, Fluid fluid, BlockPos pos, BlockState state, Direction face, BlockPos fromPos, BlockState fromState, FluidState fluidState) {
-        return this.canFill(world, fromPos, fromState, fluid) && !this.isMatchingAndStill(fluidState) && this.receivesFlow(face, world, pos, state, fromPos, fromState);
-    }
-
-    /**
-     * @author 2No2Name
-     * @reason Rearrange to have cheaper checks first
-     */
-    @Overwrite
-    private boolean canFlowDownTo(BlockView world, Fluid fluid, BlockPos pos, BlockState state, BlockPos fromPos, BlockState fromState) {
-        return (fromState.getFluidState().getFluid().matchesType((FlowableFluid) (Object) this) || this.canFill(world, fromPos, fromState, fluid)) && this.receivesFlow(Direction.DOWN, world, pos, state, fromPos, fromState);
+    public boolean canFlowDownTo(BlockView world, BlockPos pos, BlockState state, BlockPos fromPos, BlockState fromState) {
+        return (fromState.getFluidState().getFluid().matchesType((FlowableFluid) (Object) this) || canFill(world, fromPos, fromState, this.getFlowing())) && receivesFlow(Direction.DOWN, world, pos, state, fromPos, fromState);
     }
 
     @Unique
@@ -296,16 +288,16 @@ public abstract class FlowableFluidMixin {
         }
         BlockPos downPos = flowTargetPos.down();
         BlockState downBlock = world.getBlockState(downPos);
-        boolean holeFound = this.canFlowDownTo(world, this.getFlowing(), flowTargetPos, targetBlockState, downPos, downBlock);
+        boolean holeFound = this.canFlowDownTo(world, flowTargetPos, targetBlockState, downPos, downBlock);
         holeCache.put(key, holeFound);
         return holeFound;
     }
 
     @Redirect(
-            method = "canFill",
+            method = "method_61814",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;isIn(Lnet/minecraft/registry/tag/TagKey;)Z")
     )
-    private boolean isSign(BlockState blockState, TagKey<Block> tagKey, @Local Block block) {
+    private static boolean isSign(BlockState blockState, TagKey<Block> tagKey, @Local Block block) {
         if (tagKey == BlockTags.SIGNS) {
             //The sign check is expensive when using the block tag lookup.
             return block instanceof AbstractSignBlock;

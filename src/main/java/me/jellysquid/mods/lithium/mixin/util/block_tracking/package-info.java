@@ -5,7 +5,9 @@
         depends = {
                 @MixinConfigDependency(dependencyPath = "mixin.util.data_storage"),
                 @MixinConfigDependency(dependencyPath = "mixin.util.chunk_status_tracking")
-        }
+        },
+        enabled = false
+
 )
 package me.jellysquid.mods.lithium.mixin.util.block_tracking;
 

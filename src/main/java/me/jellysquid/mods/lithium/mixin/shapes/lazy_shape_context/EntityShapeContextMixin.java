@@ -39,7 +39,7 @@ public class EntityShapeContextMixin {
      * No need to use Opcodes.INSTANCEOF or similar.
      */
     @ModifyConstant(
-            method = "<init>(Lnet/minecraft/entity/Entity;)V",
+            method = "<init>(Lnet/minecraft/entity/Entity;Z)V",
             constant = @Constant(classValue = LivingEntity.class, ordinal = 0)
     )
     private static boolean redirectInstanceOf(Object obj, Class<?> clazz) {
@@ -47,7 +47,7 @@ public class EntityShapeContextMixin {
     }
 
     @ModifyConstant(
-            method = "<init>(Lnet/minecraft/entity/Entity;)V",
+            method = "<init>(Lnet/minecraft/entity/Entity;Z)V",
             constant = @Constant(classValue = LivingEntity.class, ordinal = 2)
     )
     private static boolean redirectInstanceOf2(Object obj, Class<?> clazz) {
@@ -55,14 +55,14 @@ public class EntityShapeContextMixin {
     }
 
     @Inject(
-            method = "<init>(Lnet/minecraft/entity/Entity;)V",
+            method = "<init>(Lnet/minecraft/entity/Entity;Z)V",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/block/EntityShapeContext;<init>(ZDLnet/minecraft/item/ItemStack;Ljava/util/function/Predicate;Lnet/minecraft/entity/Entity;)V",
                     shift = At.Shift.AFTER
             )
     )
-    private void initFields(Entity entity, CallbackInfo ci) {
+    private void initFields(Entity entity, boolean bl, CallbackInfo ci) {
         this.heldItem = null;
         this.walkOnFluidPredicate = null;
     }

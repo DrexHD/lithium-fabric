@@ -32,7 +32,7 @@ public abstract class RaiderEntityMixin extends Entity {
         OBTAINABLE_OMINOUS_BANNER_PREDICATE = (itemEntity) -> {
             ItemStack ominousBanner = ((LithiumData) itemEntity.getWorld()).lithium$getData().ominousBanner();
             if (ominousBanner == null) {
-                ominousBanner = Raid.getOminousBanner(itemEntity.getRegistryManager().getWrapperOrThrow(RegistryKeys.BANNER_PATTERN));
+                ominousBanner = Raid.createOminousBanner(itemEntity.getRegistryManager().getWrapperOrThrow(RegistryKeys.BANNER_PATTERN));
             }
 
             return !itemEntity.cannotPickup() && itemEntity.isAlive() &&
@@ -46,12 +46,12 @@ public abstract class RaiderEntityMixin extends Entity {
 
     @Redirect(
             method = {"loot(Lnet/minecraft/entity/ItemEntity;)V", "isCaptain()Z"},
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/village/raid/Raid;getOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/village/raid/Raid;createOminousBanner(Lnet/minecraft/registry/RegistryEntryLookup;)Lnet/minecraft/item/ItemStack;")
     )
     private ItemStack getOminousBanner(RegistryEntryLookup<BannerPattern> bannerPatternLookup) {
         ItemStack ominousBanner = ((LithiumData) this.getWorld()).lithium$getData().ominousBanner();
         if (ominousBanner == null) {
-            ominousBanner = Raid.getOminousBanner(bannerPatternLookup);
+            ominousBanner = Raid.createOminousBanner(bannerPatternLookup);
         }
         return ominousBanner;
     }
