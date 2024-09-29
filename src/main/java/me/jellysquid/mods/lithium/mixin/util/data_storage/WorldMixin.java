@@ -21,7 +21,7 @@ public class WorldMixin implements LithiumData {
     private LithiumData.Data storage;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void initLithiumData(MutableWorldProperties properties, RegistryKey<?> registryRef, DynamicRegistryManager registryManager, RegistryEntry<?> dimensionEntry, Supplier<?> profiler, boolean isClient, boolean debugWorld, long biomeAccess, int maxChainedNeighborUpdates, CallbackInfo ci) {
+    private void initLithiumData(MutableWorldProperties properties, RegistryKey registryRef, DynamicRegistryManager registryManager, RegistryEntry dimensionEntry, boolean isClient, boolean debugWorld, long seed, int maxChainedNeighborUpdates, CallbackInfo ci) {
         this.storage = new LithiumData.Data((World) (Object) this);
     }
 

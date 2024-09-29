@@ -4,7 +4,7 @@ import com.google.common.base.Predicates;
 import me.jellysquid.mods.lithium.common.entity.pushable.EntityPushablePredicate;
 import me.jellysquid.mods.lithium.common.world.WorldHelper;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.entity.vehicle.AbstractBoatEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.minecraft.world.entity.SectionedEntityCache;
@@ -17,8 +17,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
-@Mixin(BoatEntity.class)
-public class BoatEntityMixin {
+@Mixin(AbstractBoatEntity.class)
+public class AbstractBoatEntityMixin {
     @Redirect(
             method = "tick()V",
             at = @At(

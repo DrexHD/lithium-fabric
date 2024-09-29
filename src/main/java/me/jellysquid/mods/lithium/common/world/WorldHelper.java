@@ -13,6 +13,7 @@ import net.minecraft.util.collection.TypeFilterableList;
 import net.minecraft.util.function.LazyIterationConsumer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.profiler.Profilers;
 import net.minecraft.world.EntityView;
 import net.minecraft.world.World;
 import net.minecraft.world.entity.SectionedEntityCache;
@@ -43,7 +44,7 @@ public class WorldHelper {
         if (!CUSTOM_TYPE_FILTERABLE_LIST_DISABLED && entityView instanceof World world && (collidingEntity == null || !EntityClassGroup.CUSTOM_COLLIDE_LIKE_MINECART_BOAT_WINDCHARGE.contains(collidingEntity.getClass()))) {
             SectionedEntityCache<Entity> cache = getEntityCacheOrNull(world);
             if (cache != null) {
-                world.getProfiler().visit("getEntities");
+                Profilers.get().visit("getEntities");
                 return getEntitiesOfClassGroup(cache, collidingEntity, EntityClassGroup.NoDragonClassGroup.BOAT_SHULKER_LIKE_COLLISION, box);
             }
         }
@@ -57,7 +58,7 @@ public class WorldHelper {
             if (collidingEntity == null || !EntityClassGroup.CUSTOM_COLLIDE_LIKE_MINECART_BOAT_WINDCHARGE.contains(collidingEntity.getClass())) {
                 SectionedEntityCache<Entity> cache = getEntityCacheOrNull(world);
                 if (cache != null) {
-                    world.getProfiler().visit("getEntities");
+                    Profilers.get().visit("getEntities");
                     return getEntitiesOfClassGroup(cache, collidingEntity, EntityClassGroup.NoDragonClassGroup.BOAT_SHULKER_LIKE_COLLISION, box);
                 }
             }

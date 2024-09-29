@@ -1,7 +1,7 @@
 package me.jellysquid.mods.lithium.mixin.cached_hashcode;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.util.math.Direction;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(Block.NeighborGroup.class)
-public class BlockNeighborGroupMixin {
+@Mixin(FlowableFluid.NeighborGroup.class)
+public class FlowableFluidNeighborGroupMixin {
     @Shadow
     @Final
     private BlockState self;

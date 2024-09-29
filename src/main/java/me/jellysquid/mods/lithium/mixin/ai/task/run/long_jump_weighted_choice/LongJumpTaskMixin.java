@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 public class LongJumpTaskMixin<E extends MobEntity> {
 
     @Shadow
-    protected List<LongJumpTask.Target> targets;
+    protected List<LongJumpTask.Target> potentialTargets;
 
     @Shadow
     @Final
@@ -44,13 +44,13 @@ public class LongJumpTaskMixin<E extends MobEntity> {
     )
     private void setTargets(ServerWorld serverWorld, E mobEntity, long l, CallbackInfo ci, @Local BlockPos centerPos) {
         if (this.horizontalRange < 128 && this.verticalRange < 128) {
-            this.targets = LongJumpChoiceList.forCenter(centerPos, (byte) this.horizontalRange, (byte) this.verticalRange);
+            this.potentialTargets = LongJumpChoiceList.forCenter(centerPos, (byte) this.horizontalRange, (byte) this.verticalRange);
             ci.cancel();
         }
     }
 
     @Redirect(
-            method = "getTarget(Lnet/minecraft/server/world/ServerWorld;)Ljava/util/Optional;",
+            method = "removeRandomTarget",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/util/collection/Weighting;getRandom(Lnet/minecraft/util/math/random/Random;Ljava/util/List;)Ljava/util/Optional;")
     )
     private Optional<LongJumpTask.Target> getRandomFast(Random random, List<LongJumpTask.Target> pool) {
@@ -63,11 +63,11 @@ public class LongJumpTaskMixin<E extends MobEntity> {
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     @Redirect(
-            method = "getTarget(Lnet/minecraft/server/world/ServerWorld;)Ljava/util/Optional;",
+            method = "removeRandomTarget",
             at = @At(value = "INVOKE", target = "Ljava/util/Optional;ifPresent(Ljava/util/function/Consumer;)V")
     )
     private void skipRemoveIfAlreadyRemoved(Optional<LongJumpTask.Target> result, Consumer<? super LongJumpTask.Target> removeAction) {
-        if (!(this.targets instanceof LongJumpChoiceList)) {
+        if (!(this.potentialTargets instanceof LongJumpChoiceList)) {
             result.ifPresent(removeAction);
         }
     }

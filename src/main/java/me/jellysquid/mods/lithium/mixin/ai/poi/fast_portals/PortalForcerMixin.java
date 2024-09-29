@@ -1,6 +1,6 @@
 package me.jellysquid.mods.lithium.mixin.ai.poi.fast_portals;
 
-import me.jellysquid.mods.lithium.common.util.POIRegistryEntries;
+import me.jellysquid.mods.lithium.common.world.LithiumData;
 import me.jellysquid.mods.lithium.common.world.interests.PointOfInterestStorageExtended;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
@@ -35,7 +35,7 @@ public class PortalForcerMixin {
         poiStorage.preloadChunks(this.world, centerPos, searchRadius);
 
         Optional<PointOfInterest> ret = ((PointOfInterestStorageExtended) poiStorage).lithium$findNearestForPortalLogic(centerPos, searchRadius,
-                POIRegistryEntries.NETHER_PORTAL_ENTRY, PointOfInterestStorage.OccupationStatus.ANY,
+                ((LithiumData)world).lithium$getData().netherPortalEntry(), PointOfInterestStorage.OccupationStatus.ANY,
                 (poi) -> this.world.getBlockState(poi.getPos()).contains(Properties.HORIZONTAL_AXIS),
                 worldBorder
         );

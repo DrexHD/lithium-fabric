@@ -93,7 +93,7 @@ public abstract class ChunkTicketManagerMixin {
     }
 
 
-    @Redirect(method = "purge",
+    @Redirect(method = "purgeExpiredTickets",
             at = @At(
                     value = "FIELD",
                     target = "Lnet/minecraft/server/world/ChunkTicketManager;ticketsByPosition:Lit/unimi/dsi/fastutil/longs/Long2ObjectOpenHashMap;",
@@ -104,7 +104,7 @@ public abstract class ChunkTicketManagerMixin {
         return this.positionWithExpiringTicket;
     }
 
-    @Redirect(method = "purge",
+    @Redirect(method = "purgeExpiredTickets",
             at = @At(
                 value = "INVOKE",
                 target = "Lnet/minecraft/util/collection/SortedArraySet;isEmpty()Z"
@@ -114,7 +114,7 @@ public abstract class ChunkTicketManagerMixin {
         return canNoneExpire(tickets);
     }
 
-    @Inject(method = "purge", locals = LocalCapture.CAPTURE_FAILHARD,
+    @Inject(method = "purgeExpiredTickets", locals = LocalCapture.CAPTURE_FAILHARD,
             at = @At(
                     value = "INVOKE", shift = At.Shift.BEFORE,
                     target = "Lnet/minecraft/util/collection/SortedArraySet;isEmpty()Z"
@@ -127,7 +127,7 @@ public abstract class ChunkTicketManagerMixin {
         }
     }
 
-    @Redirect(method = "purge",
+    @Redirect(method = "purgeExpiredTickets",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/util/collection/SortedArraySet;iterator()Ljava/util/Iterator;"

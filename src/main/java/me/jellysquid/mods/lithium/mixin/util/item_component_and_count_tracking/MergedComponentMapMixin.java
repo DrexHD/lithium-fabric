@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MergedComponentMap.class)
-public class ComponentMapImplMixin implements ChangePublisher<MergedComponentMap> {
+public class MergedComponentMapMixin implements ChangePublisher<MergedComponentMap> {
 
     @Unique
     private ChangeSubscriber<MergedComponentMap> subscriber;

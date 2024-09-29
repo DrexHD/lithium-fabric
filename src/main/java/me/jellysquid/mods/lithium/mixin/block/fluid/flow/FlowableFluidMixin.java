@@ -1,6 +1,5 @@
 package me.jellysquid.mods.lithium.mixin.block.fluid.flow;
 
-import com.google.common.collect.Maps;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.bytes.Byte2BooleanOpenHashMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ByteMap;
@@ -15,6 +14,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
@@ -25,9 +25,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
 
@@ -50,7 +48,7 @@ public abstract class FlowableFluidMixin {
 
     @Shadow
     /*Checks if creating a water source or flowing, and the correct block state in case the block is going to be set*/
-    protected abstract FluidState getUpdatedState(World world, BlockPos pos, BlockState state);
+    protected abstract FluidState getUpdatedState(ServerWorld world, BlockPos pos, BlockState state);
 
 
     @Shadow
@@ -146,7 +144,7 @@ public abstract class FlowableFluidMixin {
     }
 
     @Unique
-    private void calculateComplexFluidFlowDirections(World world, BlockPos startPos, BlockState startState, BlockState[] blockStateCache, Map<Direction, FluidState> flowResultByDirection) {
+    private void calculateComplexFluidFlowDirections(ServerWorld world, BlockPos startPos, BlockState startState, BlockState[] blockStateCache, Map<Direction, FluidState> flowResultByDirection) {
         //Search like breadth-first-search for paths the fluid can flow
         //Only move in directions the fluid can move (e.g. block can contain / be replaced by fluid) (vanilla conditions)
         //For each node remember the first move step (direction) of the paths that led to this node

@@ -95,10 +95,6 @@ Disable the parent animal sensor when an animal is not a baby. Would differ from
 (default: `true`)  
 Patches that reduce memory allocations  
   
-### `mixin.alloc.blockstate`
-(default: `true`)  
-Improve the BlockState withTable lookup by using a custom table implementation.  
-  
 ### `mixin.alloc.chunk_random`
 (default: `true`)  
 Random block ticking uses fewer block position allocations, thereby reducing the object allocation rate.  
@@ -116,10 +112,6 @@ Reduce stream code usage when getting the passengers of an entity
 Entity trackers use a fastutil set for storing players instead of an IdentityHashSet  
   
 ### `mixin.alloc.enum_values`
-(default: `true`)  
-Avoid `Enum#values()` array copy in frequently called code  
-  
-### `mixin.alloc.enum_values.living_entity`
 (default: `true`)  
 Avoid `Enum#values()` array copy in frequently called code  
   
@@ -251,10 +243,6 @@ Use ReferenceArraySet instead of HashSet to store the fluids the entity is curre
 ### `mixin.collections.gamerules`
 (default: `true`)  
 Uses fastutil hashmaps for gamerules  
-  
-### `mixin.collections.goals`
-(default: `true`)  
-Uses fastutil hashsets for goals in the AI goal selector  
   
 ### `mixin.collections.mob_spawning`
 (default: `true`)  
@@ -444,10 +432,6 @@ Requirements:
 ### `mixin.minimal_nonvanilla.world.expiring_chunk_tickets`
 (default: `true`)  
 Only check positions with expiring tickets during ticket expiration. Can cause reordering of chunks unloading. The chunk unloading order in vanilla is predictable, but depends on the hash of the chunk position of the tickets and the hashes of the other chunk tickets, and the order of creation of the chunk tickets when hash collisions occur. No known contraptions depend on the unload order.  
-  
-### `mixin.profiler`
-(default: `true`)  
-Avoid indirection when accessing the profiler  
   
 ### `mixin.shapes`
 (default: `true`)  

@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -51,10 +52,10 @@ public abstract class ServerWorldMixin {
             method = "tickChunk(Lnet/minecraft/world/chunk/WorldChunk;I)V",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/fluid/FluidState;onRandomTick(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/random/Random;)V"
+                    target = "Lnet/minecraft/fluid/FluidState;onRandomTick(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/random/Random;)V"
             )
     )
-    private void redirectFluidStateTick(FluidState fluidState, World world, BlockPos pos, net.minecraft.util.math.random.Random rand) {
+    private void redirectFluidStateTick(FluidState fluidState, ServerWorld world, BlockPos pos, Random rand) {
         fluidState.onRandomTick(world, pos.toImmutable(), rand);
     }
 }

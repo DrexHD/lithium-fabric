@@ -6,9 +6,12 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
 import net.minecraft.world.block.WireOrientation;
+import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,13 +30,14 @@ public abstract class HopperBlockMixin extends BlockWithEntity {
 
     @Intrinsic
     @Override
-    public BlockState getStateForNeighborUpdate(BlockState myBlockState, Direction direction, BlockState newState, WorldAccess world, BlockPos myPos, BlockPos posFrom) {
-        return super.getStateForNeighborUpdate(myBlockState, direction, newState, world, myPos, posFrom);
+    public BlockState getStateForNeighborUpdate(BlockState myBlockState, WorldView world, ScheduledTickView tickView, BlockPos pos, Direction direction, BlockPos posFrom, BlockState newState, Random random) {
+        return super.getStateForNeighborUpdate(myBlockState, world, tickView, pos, direction, posFrom, newState, random);
     }
 
     @SuppressWarnings({"MixinAnnotationTarget", "UnresolvedMixinReference"})
-    @Inject(method = "getStateForNeighborUpdate(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/Direction;Lnet/minecraft/block/BlockState;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;", at = @At("HEAD"))
-    private void notifyOnNeighborUpdate(BlockState myBlockState, Direction direction, BlockState newState, WorldAccess world, BlockPos myPos, BlockPos posFrom, CallbackInfoReturnable<BlockState> ci) {
+    @Inject(method = "getStateForNeighborUpdate(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/WorldView;Lnet/minecraft/world/tick/ScheduledTickView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/random/Random;)Lnet/minecraft/block/BlockState;", at = @At("HEAD"))
+    // TODO 24w38a signature changed and wrong arguments may be used
+    private void notifyOnNeighborUpdate(BlockState myBlockState, WorldView world, ScheduledTickView tickView, BlockPos myPos, Direction direction, BlockPos posFrom, BlockState newState, Random random, CallbackInfoReturnable<BlockState> ci) {
         //invalidate cache when composters change state
         if (!world.isClient() && newState.getBlock() instanceof InventoryProvider) {
             this.updateHopper(world, myBlockState, myPos, posFrom);
@@ -53,7 +57,7 @@ public abstract class HopperBlockMixin extends BlockWithEntity {
     }
 
     @Unique
-    private void updateHopper(WorldAccess world, BlockState myBlockState, BlockPos myPos, BlockPos posFrom) {
+    private void updateHopper(WorldView world, BlockState myBlockState, BlockPos myPos, BlockPos posFrom) {
         Direction facing = myBlockState.get(HopperBlock.FACING);
         boolean above = posFrom.getY() == myPos.getY() + 1;
         if (above || posFrom.getX() == myPos.getX() + facing.getOffsetX() && posFrom.getY() == myPos.getY() + facing.getOffsetY() && posFrom.getZ() == myPos.getZ() + facing.getOffsetZ()) {

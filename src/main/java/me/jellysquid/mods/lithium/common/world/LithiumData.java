@@ -10,9 +10,12 @@ import me.jellysquid.mods.lithium.common.util.deduplication.LithiumInterner;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.village.raid.Raid;
 import net.minecraft.world.World;
 import net.minecraft.world.event.listener.GameEventDispatcher;
+import net.minecraft.world.poi.PointOfInterestType;
+import net.minecraft.world.poi.PointOfInterestTypes;
 
 public interface LithiumData {
 
@@ -36,7 +39,11 @@ public interface LithiumData {
             LithiumInterner<SectionedEntityMovementTracker<?, ?>> entityMovementTrackers,
 
             // Block ChunkSection listeners
-            Long2ReferenceOpenHashMap<ChunkSectionChangeCallback> chunkSectionChangeCallbacks
+            Long2ReferenceOpenHashMap<ChunkSectionChangeCallback> chunkSectionChangeCallbacks,
+
+            // Poi registry entries
+            RegistryEntry<PointOfInterestType> netherPortalEntry,
+            RegistryEntry<PointOfInterestType> homeEntry
     ) {
         public Data(World world) {
             this(
@@ -45,7 +52,9 @@ public interface LithiumData {
                     new ReferenceOpenHashSet<>(),
                     new LithiumInterner<>(),
                     new LithiumInterner<>(),
-                    new Long2ReferenceOpenHashMap<>()
+                    new Long2ReferenceOpenHashMap<>(),
+                    world.getRegistryManager().getOrThrow(RegistryKeys.POINT_OF_INTEREST_TYPE).getOrThrow(PointOfInterestTypes.NETHER_PORTAL),
+                    world.getRegistryManager().getOrThrow(RegistryKeys.POINT_OF_INTEREST_TYPE).getOrThrow(PointOfInterestTypes.HOME)
             );
         }
     }
