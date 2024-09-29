@@ -32,7 +32,7 @@ public abstract class RaiderEntityMixin extends Entity {
         OBTAINABLE_OMINOUS_BANNER_PREDICATE = (itemEntity) -> {
             ItemStack ominousBanner = ((LithiumData) itemEntity.getWorld()).lithium$getData().ominousBanner();
             if (ominousBanner == null) {
-                ominousBanner = Raid.createOminousBanner(itemEntity.getRegistryManager().getWrapperOrThrow(RegistryKeys.BANNER_PATTERN));
+                ominousBanner = Raid.createOminousBanner(itemEntity.getRegistryManager().getOrThrow(RegistryKeys.BANNER_PATTERN));
             }
 
             return !itemEntity.cannotPickup() && itemEntity.isAlive() &&

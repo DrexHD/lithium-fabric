@@ -28,6 +28,6 @@ public abstract class ServerWorldMixin extends World {
 
     @Override
     public Profiler getProfiler() {
-        return this.getServer().getProfiler();
+        return this.getServer().startTickMetrics();
     }
 }
