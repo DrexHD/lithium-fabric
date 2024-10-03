@@ -1,5 +1,6 @@
 package me.jellysquid.mods.lithium.mixin.world.block_entity_ticking.sleeping.campfire.unlit;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import me.jellysquid.mods.lithium.common.block.entity.SleepingBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -22,10 +23,9 @@ public abstract class CampfireBlockEntityMixin extends BlockEntity implements Sl
 
     @Inject(
             method = "unlitServerTick",
-            at = @At("RETURN"),
-            locals = LocalCapture.CAPTURE_FAILHARD
+            at = @At("RETURN")
     )
-    private static void trySleepUnlit(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfire, CallbackInfo ci, boolean hadProgress) {
+    private static void trySleepUnlit(World world, BlockPos pos, BlockState state, CampfireBlockEntity campfire, CallbackInfo ci, @Local boolean hadProgress) {
         if (!hadProgress) {
             CampfireBlockEntityMixin self = (CampfireBlockEntityMixin) (Object) campfire;
             self.lithium$startSleeping();

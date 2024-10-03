@@ -10,6 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.BlockEntityTickInvoker;
 import org.spongepowered.asm.mixin.Mixin;
@@ -54,7 +55,7 @@ public class CampfireBlockEntityMixin extends BlockEntity implements SleepingBlo
             method = "addItem",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/util/collection/DefaultedList;set(ILjava/lang/Object;)Ljava/lang/Object;")
     )
-    private void wakeUpOnAddItem(LivingEntity user, ItemStack stack, int cookTime, CallbackInfoReturnable<Boolean> cir) {
+    private void wakeUpOnAddItem(ServerWorld world, LivingEntity entity, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         this.wakeUpNow();
     }
 

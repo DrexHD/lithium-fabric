@@ -7,8 +7,8 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.chunk.BlockEntityTickInvoker;
 import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
@@ -54,7 +54,7 @@ public abstract class AbstractFurnaceBlockEntityMixin extends BlockEntity implem
     }
 
     @Inject(method = "tick", at = @At("RETURN" ))
-    private static void checkSleep(World world, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity blockEntity, CallbackInfo ci) {
+    private static void checkSleep(ServerWorld world, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity blockEntity, CallbackInfo ci) {
         ((AbstractFurnaceBlockEntityMixin) (Object) blockEntity).checkSleep(state);
     }
 
