@@ -610,7 +610,7 @@ Requirements:
 Faster block and fluid access due to inlining and reduced method size  
   
 ### `mixin.world.inline_height`
-(default: `true`)  
+(default: `false`)  
 Reduces indirection by inlining world height access methods  
   
 ### `mixin.world.raycast`
